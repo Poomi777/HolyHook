@@ -148,12 +148,12 @@ GameObject:
   m_Component:
   - component: {fileID: 8988542886321230066}
   - component: {fileID: 7200006519643430171}
-  - component: {fileID: 6249335404866575957}
+  - component: {fileID: 4390744692756505786}
   - component: {fileID: 500554289881840057}
   - component: {fileID: 8774031005717667181}
   - component: {fileID: 1471972897999824136}
-  m_Layer: 8
-  m_Name: PlayerCapsule
+  m_Layer: 6
+  m_Name: PlayerCharacter
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,7 +167,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7761498735735932648}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -202,7 +202,7 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.93, z: 0}
---- !u!114 &6249335404866575957
+--- !u!114 &4390744692756505786
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7761498735735932648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55919ac34a26952479f3fc91f777b2fa, type: 3}
+  m_Script: {fileID: 11500000, guid: 00f4972f9f684e644bda1d36ca76f744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 4
@@ -229,8 +229,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   CinemachineCameraTarget: {fileID: 3286278187673464754}
-  TopClamp: 89
-  BottomClamp: -89
+  TopClamp: 90
+  BottomClamp: -90
 --- !u!114 &500554289881840057
 MonoBehaviour:
   m_ObjectHideFlags: 0

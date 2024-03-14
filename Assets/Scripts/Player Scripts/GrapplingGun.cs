@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using StarterAssets;
 using UnityEngine;
 
 public class GrapplingGun : MonoBehaviour
@@ -7,10 +8,12 @@ public class GrapplingGun : MonoBehaviour
     [Header("References")]
 
     public Transform cam;
-    public transform gunTip;
+    public Transform gunTip;
     public LayerMask whatIsGrapplable;
+    public LineRenderer lineRenderer;
 
-    private PlayerMovementGrappling playermovement;
+    private PlayerController playerMovement;
+    
 
     [Header("Grappling")]
     public float maxGrappleDistance;
@@ -30,7 +33,7 @@ public class GrapplingGun : MonoBehaviour
 
     private void Start()
     {
-        playermovement = GetComponent<GrapplingGun>();
+        playerMovement = GetComponent<PlayerController>();
 
     }
 
@@ -43,10 +46,19 @@ public class GrapplingGun : MonoBehaviour
 
         if (grapplingCdTimer > 0)
         {
-            grapplingCdTimer -= grapplingCdTimer.deltaTime;
+            grapplingCdTimer -= Time.deltaTime;
         }
 
     }
+
+    private void LateUpdate()
+    {
+        if(grappling)
+        {
+            lineRenderer.SetPosition(0, gunTip.position);
+        }
+    }
+
 
     private void StartGrapple()
     {
@@ -71,6 +83,9 @@ public class GrapplingGun : MonoBehaviour
 
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
+
+        lineRenderer.enabled = true;
+        lineRenderer.SetPosition(1, grapplePoint);
     }
 
     private void ExecuteGrapple()
@@ -83,5 +98,7 @@ public class GrapplingGun : MonoBehaviour
         grappling = false;
 
         grapplingCdTimer = grapplingCd;
+
+        lineRenderer.enabled = false;
     }
 }
