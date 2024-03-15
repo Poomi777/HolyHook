@@ -327,7 +327,7 @@ public class PlayerController2 : MonoBehaviour
             enableMovementOnNextTouch = false;
             ResetRestrictions();
 
-            GetComponent<GrapplingGun2>().StopGrapple();
+            GetComponent<Swinging>().StopGrapple();
         }
     }
 

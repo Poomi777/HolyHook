@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-    //https://www.youtube.com/watch?v=TYzZsBl3OI0&t=183s&ab_channel=Dave%2FGameDevelopment 
-    //start at around 5:00 to continue the implementation
-
 public class GrapplingGun2 : MonoBehaviour
 {
     [Header("References")]
@@ -62,6 +59,8 @@ public class GrapplingGun2 : MonoBehaviour
         {
             return;
         }
+
+        GetComponent<Swinging>().StopSwing();
 
         grappling = true;
 
