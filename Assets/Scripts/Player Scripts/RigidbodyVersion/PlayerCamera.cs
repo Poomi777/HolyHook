@@ -65,4 +65,9 @@ public class PlayerCamera : MonoBehaviour
 
         cam.fieldOfView = lerpedFov;
     }
+
+    public void DoFov(float endValue)
+    {
+        GetComponent<Camera>().fieldOfView = endValue;
+    }
 }
