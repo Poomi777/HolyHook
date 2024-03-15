@@ -52,8 +52,8 @@ public class GrapplingGun2 : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (grappling)
-            lineRenderer.SetPosition(0, gunTip.position);
+    //     if (grappling)
+    //         lineRenderer.SetPosition(0, gunTip.position);
     }
 
     private void StartGrapple()
@@ -83,8 +83,8 @@ public class GrapplingGun2 : MonoBehaviour
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
 
-        lineRenderer.enabled = true;
-        lineRenderer.SetPosition(1, grapplePoint);
+        //lineRenderer.enabled = true;
+        //lineRenderer.SetPosition(1, grapplePoint);
     }
 
     private void ExecuteGrapple()
@@ -115,7 +115,17 @@ public class GrapplingGun2 : MonoBehaviour
 
         grapplingCdTimer = grapplingCd;
 
-        lineRenderer.enabled = false;
+        //lineRenderer.enabled = false;
+    }
+
+    public bool IsGrappling()
+    {
+        return grappling;
+    }
+
+    public Vector3 GetGrapplePoint()
+    {
+        return grapplePoint;
     }
 
 }

@@ -288,8 +288,11 @@ public class PlayerController2 : MonoBehaviour
     private Vector3 velocityToSet;
     private void SetVelocity()
     {
-        rb.velocity = velocityToSet;
         enableMovementOnNextTouch = true;
+        rb.velocity = velocityToSet;
+
+        cam.DoFov(grappleFov);
+        
     }
 
     public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
@@ -314,6 +317,7 @@ public class PlayerController2 : MonoBehaviour
     public void ResetRestrictions()
     {
         activeGrapple = false;
+        cam.DoFov(85f);
     }
 
     private void OnCollisionEnter(Collision collision)
