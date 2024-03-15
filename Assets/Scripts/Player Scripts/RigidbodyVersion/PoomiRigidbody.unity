@@ -314,15 +314,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd4377b42d952ac49abcb622fc6cbf79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 0}
-  gunTip: {fileID: 0}
+  cam: {fileID: 261886415}
+  gunTip: {fileID: 1299021768}
   whatIsGrappleable:
     serializedVersion: 2
-    m_Bits: 0
-  lineRenderer: {fileID: 0}
-  maxGrappleDistance: 0
-  grappleDelayTime: 0
-  grapplingCd: 0
+    m_Bits: 129
+  lineRenderer: {fileID: 1071219620}
+  maxGrappleDistance: 25
+  grappleDelayTime: 0.25
+  overshootYAxis: 2
+  grapplingCd: 0.4
   grappleKey: 324
 --- !u!1 &261886413
 GameObject:
@@ -1359,7 +1360,7 @@ GameObject:
   - component: {fileID: 1071219622}
   - component: {fileID: 1071219621}
   - component: {fileID: 1071219620}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GrapplingGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1628,7 +1629,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1299021768}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: gunTip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1832,6 +1833,7 @@ MonoBehaviour:
   lineRenderer: {fileID: 0}
   maxGrappleDistance: 25
   grappleDelayTime: 0.25
+  overshootYAxis: 0
   grapplingCd: 1
   grappleKey: 324
 --- !u!23 &1592606949

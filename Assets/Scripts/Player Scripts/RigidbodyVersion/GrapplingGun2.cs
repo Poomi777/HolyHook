@@ -13,11 +13,12 @@ public class GrapplingGun2 : MonoBehaviour
     public LayerMask whatIsGrappleable;
     public LineRenderer lineRenderer;
 
-    private PlayerController2 playermovement;
+    private PlayerController2 playerMovement;
 
     [Header("Grappling")]
     public float maxGrappleDistance;
     public float grappleDelayTime;
+    public float overshootYAxis;
 
     private Vector3 grapplePoint;
 
@@ -33,7 +34,7 @@ public class GrapplingGun2 : MonoBehaviour
 
     private void Start()
     {
-        playermovement = GetComponent<PlayerController2>();
+        playerMovement = GetComponent<PlayerController2>();
     }
 
     private void Update()
@@ -64,6 +65,9 @@ public class GrapplingGun2 : MonoBehaviour
 
         grappling = true;
 
+        //The thing that freezes the player when they start grappling
+        //playermovement.freeze = true;
+
         RaycastHit hit;
         if (Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable))
         {
@@ -85,11 +89,28 @@ public class GrapplingGun2 : MonoBehaviour
 
     private void ExecuteGrapple()
     {
+        //the thing that unfreezes player when the grappling is finalyl executed
+        //playermovement.freeze = false;
 
+        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
+
+        float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
+        float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
+
+        if (grapplePointRelativeYPos < 0)
+        {
+            highestPointOnArc = overshootYAxis;
+        }
+
+        playerMovement.JumpToPosition(grapplePoint, highestPointOnArc);
+
+        Invoke(nameof(StopGrapple), 1f);
     }
 
-    private void StopGrapple()
+    public void StopGrapple()
     {
+        //the thing that unfreezes player when the grappling is stopped
+        //playermovement.freeze = false;
         grappling = false;
 
         grapplingCdTimer = grapplingCd;

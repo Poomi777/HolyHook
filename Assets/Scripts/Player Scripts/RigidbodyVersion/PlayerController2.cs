@@ -68,6 +68,8 @@ public class PlayerController2 : MonoBehaviour
 
     public bool freeze;
 
+    private bool enableMovementOnNextTouch;
+
     public bool activeGrapple;
     public bool swinging;
 
@@ -186,7 +188,8 @@ public class PlayerController2 : MonoBehaviour
 
     private void MovePlayer()
     {
-        if (activeGrapple) return;
+        //Stops player move when grappling
+        //if (activeGrapple) return;
         if (swinging) return;
 
         // calculate movement direction
@@ -215,7 +218,8 @@ public class PlayerController2 : MonoBehaviour
 
     private void SpeedControl()
     {
-        if (activeGrapple) return;
+        //stops player from speed while grappling
+        //if (activeGrapple) return;
 
         // limiting speed on slope
         if (OnSlope() && !exitingSlope)
@@ -254,40 +258,6 @@ public class PlayerController2 : MonoBehaviour
         exitingSlope = false;
     }
 
-    private bool enableMovementOnNextTouch;
-    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
-    {
-        activeGrapple = true;
-
-        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
-        Invoke(nameof(SetVelocity), 0.1f);
-
-        Invoke(nameof(ResetRestrictions), 3f);
-    }
-
-    private Vector3 velocityToSet;
-    private void SetVelocity()
-    {
-        enableMovementOnNextTouch = true;
-        rb.velocity = velocityToSet;
-
-    }
-
-    public void ResetRestrictions()
-    {
-        activeGrapple = false;
-
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (enableMovementOnNextTouch)
-        {
-            enableMovementOnNextTouch = false;
-            ResetRestrictions();
-        }
-    }
-
     private bool OnSlope()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
@@ -302,6 +272,24 @@ public class PlayerController2 : MonoBehaviour
     private Vector3 GetSlopeMoveDirection()
     {
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+    }
+
+    public void JumpToPosition(Vector3 targetposition, float trajectoryHeight)
+    {
+        activeGrapple = true;
+        velocityToSet = CalculateJumpVelocity(transform.position, targetposition, trajectoryHeight);
+
+        Invoke(nameof(SetVelocity), 0.1f);
+
+        //if grappled too long, in this case 3 seconds, then enable movement again
+        Invoke(nameof(ResetRestrictions), 3f);
+    }
+
+    private Vector3 velocityToSet;
+    private void SetVelocity()
+    {
+        rb.velocity = velocityToSet;
+        enableMovementOnNextTouch = true;
     }
 
     public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
@@ -321,6 +309,22 @@ public class PlayerController2 : MonoBehaviour
     {
         float mult = Mathf.Pow(10.0f, (float)digits);
         return Mathf.Round(value * mult) / mult;
+    }
+
+    public void ResetRestrictions()
+    {
+        activeGrapple = false;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (enableMovementOnNextTouch)
+        {
+            enableMovementOnNextTouch = false;
+            ResetRestrictions();
+
+            GetComponent<GrapplingGun2>().StopGrapple();
+        }
     }
 
 }
