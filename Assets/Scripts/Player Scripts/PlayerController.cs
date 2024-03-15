@@ -1,18 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
-using StarterAssets;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
 
-// namespace StarterAssets
-// {
+namespace StarterAssets
+{
 	[RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-public class PlayerController : MonoBehaviour
+	public class PlayerController : MonoBehaviour
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -57,7 +55,6 @@ public class PlayerController : MonoBehaviour
 		// cinemachine
 		private float _cinemachineTargetPitch;
 
-		// player
 		private float _speed;
 		private float _rotationVelocity;
 		private float _verticalVelocity;
@@ -66,6 +63,8 @@ public class PlayerController : MonoBehaviour
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
+
+
 
 	
 #if ENABLE_INPUT_SYSTEM
@@ -115,10 +114,12 @@ public class PlayerController : MonoBehaviour
 
 		private void Update()
 		{
-			JumpAndGravity();
-			GroundedCheck();
-			Move();
-		}
+
+            GroundedCheck();
+            JumpAndGravity();
+            Move();
+
+        }
 
 		private void LateUpdate()
 		{
@@ -267,5 +268,31 @@ public class PlayerController : MonoBehaviour
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 		}
+
+        public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+        {
+
+            Vector3 jumpVelocity = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+            _verticalVelocity = jumpVelocity.y; // Set the vertical velocity for the jump
+            Vector3 horizontalMove = new Vector3(jumpVelocity.x, 0, jumpVelocity.z);
+            _controller.Move(horizontalMove * Time.deltaTime); // Apply the initial horizontal movement
+
+        }
+
+        public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+        {
+            float gravity = Physics.gravity.y;
+            float displacementY = endPoint.y - startPoint.y;
+            Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+            Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+            Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity) 
+                + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
+
+            return velocityXZ + velocityY;
+        }
+
 	}
-// }
+
+    
+}

@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using StarterAssets;
 using UnityEngine;
 
-public class GrapplingGun : MonoBehaviour
+    //https://www.youtube.com/watch?v=TYzZsBl3OI0&t=183s&ab_channel=Dave%2FGameDevelopment 
+    //start at around 5:00 to continue the implementation
+
+public class GrapplingGun2 : MonoBehaviour
 {
     [Header("References")]
     public Transform cam;
@@ -11,12 +13,11 @@ public class GrapplingGun : MonoBehaviour
     public LayerMask whatIsGrappleable;
     public LineRenderer lineRenderer;
 
-    private PlayerController playermovement;
+    private PlayerController2 playermovement;
 
     [Header("Grappling")]
     public float maxGrappleDistance;
     public float grappleDelayTime;
-    public float overshootYAxis;
 
     private Vector3 grapplePoint;
 
@@ -32,7 +33,7 @@ public class GrapplingGun : MonoBehaviour
 
     private void Start()
     {
-        playermovement = GetComponent<PlayerController>();
+        playermovement = GetComponent<PlayerController2>();
     }
 
     private void Update()
@@ -80,26 +81,11 @@ public class GrapplingGun : MonoBehaviour
 
         lineRenderer.enabled = true;
         lineRenderer.SetPosition(1, grapplePoint);
-
-        playermovement.JumpToPosition(grapplePoint, overshootYAxis);
-
     }
 
     private void ExecuteGrapple()
     {
-        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
 
-        float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
-        float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
-
-        if (grapplePointRelativeYPos < 0) 
-        {
-            highestPointOnArc = overshootYAxis;
-        }
-
-        playermovement.JumpToPosition(grapplePoint, highestPointOnArc);
-
-        Invoke(nameof(StopGrapple), 1f);
     }
 
     private void StopGrapple()
@@ -109,7 +95,6 @@ public class GrapplingGun : MonoBehaviour
         grapplingCdTimer = grapplingCd;
 
         lineRenderer.enabled = false;
-
     }
 
 }
