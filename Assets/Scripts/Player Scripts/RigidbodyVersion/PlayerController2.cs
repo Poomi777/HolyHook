@@ -189,7 +189,7 @@ public class PlayerController2 : MonoBehaviour
     private void MovePlayer()
     {
         //Stops player move when grappling
-        //if (activeGrapple) return;
+        if (activeGrapple) return;
         if (swinging) return;
 
         // calculate movement direction

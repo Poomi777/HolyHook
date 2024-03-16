@@ -56,12 +56,23 @@ public class Swinging : MonoBehaviour
     public AnimationCurve affectCurve;
     private Spring spring;
 
+    [Header("Audio")]
+    public AudioClip[] swingSounds; // Array of swing sounds.
+    private AudioSource audioSource;
+
 
     void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
         spring = new Spring();
         spring.SetTarget(0);
+
+        // Initialize AudioSource
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null) 
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
     
     void Update()
@@ -112,6 +123,14 @@ public class Swinging : MonoBehaviour
             return;
         }
 
+        //customize these for the rope animation
+        //spring.SetTarget(0f); // Desired amplitude of the rope's wave animation.
+        //spring.SetValue(0f); // Initial value of the animation, starting fully 'waved'.
+        spring.SetStrength(strength); // How 'strong' the spring pulls back to its target state.
+        spring.SetDamper(damper); // Damping to slow down the animation over time.
+        spring.SetVelocity(animationVelocity); // Initial velocity of the spring animation.
+        //
+
         CancelActiveGrapple();
         playerMovement.ResetRestrictions();
 
@@ -133,12 +152,15 @@ public class Swinging : MonoBehaviour
 
 
         //customize these as we like
-        joint.spring = 4.5f;
+        joint.spring = 15f;
         joint.damper = 7f;
         joint.massScale = 4.5f;
 
         lineRenderer.positionCount = 2;
         currentGrapplePosition = gunTip.position;
+
+
+        PlayRandomSound();
     }
 
     public void StopSwing()
@@ -305,6 +327,8 @@ public class Swinging : MonoBehaviour
 
         //lineRenderer.enabled = true;
         //lineRenderer.SetPosition(1, grapplePoint);
+
+        PlayRandomSound();
     }
 
     private void ExecuteGrapple()
@@ -377,7 +401,7 @@ public class Swinging : MonoBehaviour
 
         if (lineRenderer.positionCount != quality + 1) {
         lineRenderer.positionCount = quality + 1;
-    }
+         }
 
         if (lineRenderer.positionCount == 0)
         {
@@ -393,7 +417,7 @@ public class Swinging : MonoBehaviour
         Vector3 up = Quaternion.LookRotation(swingDirection) * Vector3.up;
 
         currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, swingPoint, Time.deltaTime * animationVelocity);
-
+        
         for (int i = 0; i < quality + 1; i++)
         {
             float delta = i / (float)quality;
@@ -402,5 +426,15 @@ public class Swinging : MonoBehaviour
         }
 
 
+    }
+
+    void PlayRandomSound()
+    {
+        if (swingSounds.Length > 0)
+        {
+            int index = Random.Range(0, swingSounds.Length);
+            audioSource.clip = swingSounds[index];
+            audioSource.Play();
+        }
     }
 }
