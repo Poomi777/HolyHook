@@ -143,10 +143,36 @@ public class Swinging : MonoBehaviour
 
     public void StopSwing()
     {
+        // playerMovement.swinging = false;
+        // lineRenderer.positionCount = 0;
+        // Destroy(joint);
+        
+        // This code above is how it is originally supposed to look like
+        // but there was a constant bug of the srping joints neverdisappearing and
+        // staying attached to the player forever, keeping the player stuck within a certain range of it
+        // The code below makes sure that every time StopSwing() happens, that it
+        // destroys any and all instances of the joint.
+        // Just giving this info out for any future cases of a similar error
+
+
         playerMovement.swinging = false;
         lineRenderer.positionCount = 0;
-        Destroy(joint);
-        //lineRenderer.positionCount = 0;
+        if (joint != null)
+        {
+            Destroy(joint);
+            joint = null; // Set to null to ensure you don't try to access it again
+        }
+        else
+        {
+            // As a fallback, if for some reason the joint reference was lost,
+            // destroy any SpringJoint attached to the player.
+            SpringJoint existingJoint = player.GetComponent<SpringJoint>();
+            if (existingJoint != null)
+            {
+                Destroy(existingJoint);
+            }
+        }
+        
     }
 
     // public void StopSwing()
