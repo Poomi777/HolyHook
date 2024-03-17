@@ -51,5 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Holy Hook.sln"
+    "dotnet.preferCSharpExtension": true,
+    "dotnet.defaultSolution": "HolyHook.sln"
 }
