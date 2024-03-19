@@ -4275,8 +4275,6 @@ MonoBehaviour:
   CinemachineCameraTarget: {fileID: 8338988565591873048}
   TopClamp: 90
   BottomClamp: -90
-  isGrappling: 0
-  enableMovementOnNextTouch: 0
 --- !u!1 &5959203424930192270
 GameObject:
   m_ObjectHideFlags: 0

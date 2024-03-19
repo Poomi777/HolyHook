@@ -19,7 +19,12 @@ public class PlayerController2 : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
+    public float canDoubleJumpTimeout = 0.30f;
+    
     bool readyToJump;
+    bool readyToDoubleJump;
+
+    float canDoubleJumpDelta;
 
     [Header("Crouching")]
     public float crouchSpeed;
@@ -79,6 +84,8 @@ public class PlayerController2 : MonoBehaviour
         rb.freezeRotation = true;
 
         readyToJump = true;
+        readyToDoubleJump = false;
+        canDoubleJumpDelta = canDoubleJumpTimeout;
 
         startYScale = transform.localScale.y;
     }
@@ -91,6 +98,9 @@ public class PlayerController2 : MonoBehaviour
         MyInput();
         SpeedControl();
         StateHandler();
+
+        if (readyToDoubleJump && canDoubleJumpDelta >= 0.0f)
+            canDoubleJumpDelta -= Time.deltaTime;
 
         // handle drag
         if (grounded && !activeGrapple)
@@ -114,6 +124,19 @@ public class PlayerController2 : MonoBehaviour
         if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
             readyToJump = false;
+            readyToDoubleJump = true;
+            canDoubleJumpDelta = canDoubleJumpTimeout;
+
+
+            Jump();
+
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+
+        if (Input.GetKey(jumpKey) && readyToDoubleJump && canDoubleJumpDelta <= 0.0f)
+        {
+            readyToDoubleJump = false;
+            canDoubleJumpDelta = canDoubleJumpTimeout;
 
             Jump();
 
@@ -177,6 +200,13 @@ public class PlayerController2 : MonoBehaviour
         {
             state = MovementState.walking;
             moveSpeed = walkSpeed;
+            
+        }
+
+        else if (grounded)
+        {
+            readyToDoubleJump = true;
+            canDoubleJumpDelta = canDoubleJumpTimeout;
         }
 
         // Mode - Air
