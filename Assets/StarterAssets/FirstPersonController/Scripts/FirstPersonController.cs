@@ -42,8 +42,12 @@ namespace StarterAssets
 		public float GroundedRadius = 0.5f;
 		[Tooltip("What layers the character uses as ground")]
 		public LayerMask GroundLayers;
+        [Tooltip("Can the character double jump after jumping?")]
+        public bool canDoubleJump = false;
+		[Tooltip("Time between pressing jump and when the character double jump")]
+		public float canDoubleJumpTimeout = 0.15f;
 
-		[Header("Cinemachine")]
+        [Header("Cinemachine")]
 		[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
 		public GameObject CinemachineCameraTarget;
 		[Tooltip("How far in degrees can you move the camera up")]
@@ -63,6 +67,7 @@ namespace StarterAssets
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
+		private float _doubleJumpTimeout;
 
 	
 #if ENABLE_INPUT_SYSTEM
@@ -108,6 +113,7 @@ namespace StarterAssets
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
+			_doubleJumpTimeout = canDoubleJumpTimeout;
 		}
 
 		private void Update()
@@ -127,6 +133,11 @@ namespace StarterAssets
 			// set sphere position, with offset
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
 			Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
+			if (Grounded)
+			{
+				canDoubleJump = true;
+                _doubleJumpTimeout = canDoubleJumpTimeout;
+			}
 		}
 
 		private void CameraRotation()
@@ -216,6 +227,8 @@ namespace StarterAssets
 				{
 					// the square root of H * -2 * G = how much velocity needed to reach desired height
 					_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+					canDoubleJump = true;
+
 				}
 
 				// jump timeout
@@ -223,9 +236,27 @@ namespace StarterAssets
 				{
 					_jumpTimeoutDelta -= Time.deltaTime;
 				}
-			}
+
+                if (_doubleJumpTimeout >= 0.0f && canDoubleJump)
+                {
+                    _doubleJumpTimeout -= Time.deltaTime;
+                }
+                
+
+            }
 			else
 			{
+				if (_doubleJumpTimeout >= 0.0f && canDoubleJump)
+				{
+                    _doubleJumpTimeout -= Time.deltaTime;
+				}
+				if (_input.jump && canDoubleJump && _doubleJumpTimeout <= 0.0f)
+				{
+                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+					canDoubleJump = false;
+					_doubleJumpTimeout = canDoubleJumpTimeout;
+					
+                }
 				// reset the jump timeout timer
 				_jumpTimeoutDelta = JumpTimeout;
 

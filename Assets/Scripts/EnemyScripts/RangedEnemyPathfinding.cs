@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RangedEnemyPathfinding : MonoBehaviour
 {
-    private UnityEngine.AI.NavMeshAgent agent;
+    private NavMeshAgent agent;
     private GameObject player;
 
     void Start()
     {
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player");
     } 
 
