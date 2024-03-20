@@ -1,0 +1,2 @@
+This folder is where the player and all their needs or references are placed.
+Instead of putting it as a child to the player which can sometimes cause bugs
