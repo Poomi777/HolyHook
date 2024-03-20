@@ -18,6 +18,7 @@ public class PlayerCamera : MonoBehaviour
 
     [Header("Fov")]
     public bool useFluentFov;
+    public PlayerController2 playerMovement;
     public Rigidbody rb;
     public Camera cam;
     public float minMovementSpeed;

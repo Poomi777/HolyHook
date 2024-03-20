@@ -79,8 +79,8 @@ public class Swinging : MonoBehaviour
     {
         MyInput();
 
-        if (Input.GetKeyDown(swingKey)) StartSwing();
-        if (Input.GetKeyUp(swingKey)) StopSwing();
+        //if (Input.GetKeyDown(swingKey)) StartSwing();
+        //if (Input.GetKeyUp(swingKey)) StopSwing();
 
         CheckForSwingPoints();
 
@@ -144,7 +144,7 @@ public class Swinging : MonoBehaviour
         joint.autoConfigureConnectedAnchor = false;
         joint.connectedAnchor = swingPoint;
 
-        float distanceFromPoint = Vector3.Distance(player.position, swingPoint);
+        float distanceFromPoint = Vector3.Distance(player.position, swingPoint) - 5f;
 
         //distance grapple will try to keep from grapple point
         joint.maxDistance = distanceFromPoint * 0.8f;
@@ -152,7 +152,7 @@ public class Swinging : MonoBehaviour
 
 
         //customize these as we like
-        joint.spring = 15f;
+        joint.spring = 4.5f;
         joint.damper = 7f;
         joint.massScale = 4.5f;
 
@@ -226,7 +226,7 @@ public class Swinging : MonoBehaviour
             Vector3 directionToPoint = swingPoint - transform.position;
             rb.AddForce(directionToPoint.normalized * forwardThrustForce * Time.deltaTime);
 
-            float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
+            float distanceFromPoint = Vector3.Distance(transform.position, swingPoint) - 5f;
 
             joint.maxDistance = distanceFromPoint * 0.8f;
             joint.minDistance = distanceFromPoint * 0.25f;
