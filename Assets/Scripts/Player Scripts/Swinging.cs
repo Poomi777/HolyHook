@@ -9,7 +9,7 @@ public class Swinging : MonoBehaviour
     public LineRenderer lineRenderer;
     public Transform gunTip, cam, player;
     public LayerMask WhatIsGrappleable;
-    public PlayerController2 playerMovement;
+    public PlayerController playerMovement;
 
     [Header("Input")]
     public KeyCode swingKey = KeyCode.Mouse0;
