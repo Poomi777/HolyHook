@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed;
     public float sprintSpeed;
     public float swingSpeed;
+    public float airSpeed;
 
     public float groundDrag;
 
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
     public float canDoubleJumpTimeout = 0.30f;
     
     bool readyToJump;
-    bool readyToDoubleJump;
+    public bool readyToDoubleJump;
 
     float canDoubleJumpDelta;
 
@@ -213,6 +214,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             state = MovementState.air;
+            moveSpeed = airSpeed;
         }
 
         if (!grounded)

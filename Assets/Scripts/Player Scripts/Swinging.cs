@@ -201,6 +201,7 @@ public class Swinging : MonoBehaviour
 
 
         playerMovement.swinging = false;
+        playerMovement.readyToDoubleJump = true;
         lineRenderer.positionCount = 0;
         if (joint != null)
         {
