@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.InputSystem;
+using StarterAssets;
 
 
 public class PlayerCamera : MonoBehaviour
@@ -25,28 +27,59 @@ public class PlayerCamera : MonoBehaviour
     public float minFov;
     public float maxFov;
 
+    // For new input system
+    private StarterAssetsInputs _input;
+    private PlayerInput _playerInput;
+    private const float _threshold = 0.01f;
+
+    private bool IsCurrentDeviceMouse
+    {
+        get
+        {
+            #if ENABLE_INPUT_SYSTEM
+                return _playerInput.currentControlScheme == "KeyboardMouse";
+            #else
+			    return false;
+            #endif
+        }
+    }
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-    }
+
+        _input = GetComponent<StarterAssetsInputs>();
+        #if ENABLE_INPUT_SYSTEM
+            _playerInput = GetComponent<PlayerInput>();
+        #else
+		    Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+        #endif
+            }
 
     private void Update()
     {
-        // get mouse input
-        float mouseX = Input.GetAxisRaw("Mouse X") * sensX;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * sensY;
+        if (_input.look.sqrMagnitude >= _threshold)
+        {
 
-        yRotation += mouseX * multiplier;
+            float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+            // get mouse input
+            float mouseX = _input.look.x * sensX * deltaTimeMultiplier;
+            float mouseY = _input.look.y * sensY * deltaTimeMultiplier;
 
-        xRotation -= mouseY * multiplier;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            yRotation += mouseX * multiplier;
 
-        // rotate cam and orientation
-        camHolder.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+            xRotation += mouseY * multiplier;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        if (useFluentFov) HandleFov();
+            // rotate cam and orientation
+            camHolder.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+
+            if (useFluentFov) HandleFov();
+        }
+
+        
     }
 
     private void HandleFov()

@@ -1,9 +1,11 @@
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-    //https://www.youtube.com/watch?v=TYzZsBl3OI0&t=183s&ab_channel=Dave%2FGameDevelopment 
-    //start at around 5:00 to continue the implementation
+//https://www.youtube.com/watch?v=TYzZsBl3OI0&t=183s&ab_channel=Dave%2FGameDevelopment 
+//start at around 5:00 to continue the implementation
 
 public class PlayerController2 : MonoBehaviour
 {
@@ -19,7 +21,7 @@ public class PlayerController2 : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
-    public float canDoubleJumpTimeout = 0.30f;
+    public float canDoubleJumpTimeout = 0.10f;
     
     bool readyToJump;
     bool readyToDoubleJump;
@@ -52,12 +54,14 @@ public class PlayerController2 : MonoBehaviour
 
     public Transform orientation;
 
-    float horizontalInput;
-    float verticalInput;
+    public float horizontalInput;
+    public float verticalInput;
 
     Vector3 moveDirection;
 
     Rigidbody rb;
+
+    private StarterAssetsInputs _input;
 
     public MovementState state;
     public enum MovementState
@@ -81,6 +85,8 @@ public class PlayerController2 : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        _input = GetComponent<StarterAssetsInputs>();
+        
         rb.freezeRotation = true;
 
         readyToJump = true;
@@ -117,11 +123,14 @@ public class PlayerController2 : MonoBehaviour
 
     private void MyInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        //horizontalInput = Input.GetAxisRaw("Horizontal");
+        //verticalInput = Input.GetAxisRaw("Vertical");
+
+        horizontalInput = _input.move.x;
+        verticalInput = _input.move.y;
 
         // when to jump
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        if (_input.jump && readyToJump && grounded)
         {
             readyToJump = false;
             readyToDoubleJump = true;
@@ -133,7 +142,7 @@ public class PlayerController2 : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-        if (Input.GetKey(jumpKey) && readyToDoubleJump && canDoubleJumpDelta <= 0.0f)
+        if (_input.jump && readyToDoubleJump && canDoubleJumpDelta <= 0.0f)
         {
             readyToDoubleJump = false;
             canDoubleJumpDelta = canDoubleJumpTimeout;
@@ -144,17 +153,18 @@ public class PlayerController2 : MonoBehaviour
         }
 
         // start crouch
-        if (Input.GetKeyDown(crouchKey))
+        if (_input.crouch)
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         }
 
         // stop crouch
-        if (Input.GetKeyUp(crouchKey))
+        if (!_input.crouch)
         {
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
         }
+        
     }
 
     private void StateHandler()
@@ -182,14 +192,14 @@ public class PlayerController2 : MonoBehaviour
         }
 
         // Mode - Crouching
-        else if (Input.GetKey(crouchKey))
+        else if (_input.crouch)
         {
             state = MovementState.crouching;
             moveSpeed = crouchSpeed;
         }
 
         // Mode - Sprinting
-        else if (grounded && Input.GetKey(sprintKey))
+        else if (grounded && _input.sprint)
         {
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
@@ -200,19 +210,21 @@ public class PlayerController2 : MonoBehaviour
         {
             state = MovementState.walking;
             moveSpeed = walkSpeed;
-            
-        }
-
-        else if (grounded)
-        {
             readyToDoubleJump = true;
             canDoubleJumpDelta = canDoubleJumpTimeout;
+            
+
         }
 
         // Mode - Air
         else
         {
             state = MovementState.air;
+            
+        }
+        if (!grounded)
+        {
+            _input.jump = false;
         }
     }
 
@@ -236,11 +248,11 @@ public class PlayerController2 : MonoBehaviour
 
         // on ground
         else if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            rb.AddForce(moveDirection * moveSpeed * 10f, ForceMode.Force);
 
         // in air
         else if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            rb.AddForce(moveDirection * moveSpeed * 10f * airMultiplier, ForceMode.Force);
 
         // turn gravity off while on slope
         rb.useGravity = !OnSlope();

@@ -1,3 +1,4 @@
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 //using System.Numerics;
@@ -56,6 +57,10 @@ public class Swinging : MonoBehaviour
     public AnimationCurve affectCurve;
     private Spring spring;
 
+    // For new input system
+    private StarterAssetsInputs _input;
+    private bool isSwinging = false;
+
     [Header("Audio")]
     public AudioClip[] swingSounds; // Array of swing sounds.
     private AudioSource audioSource;
@@ -74,13 +79,19 @@ public class Swinging : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
         }
     }
-    
+
+
+    void Start()
+    {
+        _input = GetComponent<StarterAssetsInputs>();
+    }
+
     void Update()
     {
         MyInput();
 
-        if (Input.GetKeyDown(swingKey)) StartSwing();
-        if (Input.GetKeyUp(swingKey)) StopSwing();
+        //if (Input.GetKeyDown(swingKey)) StartSwing();
+        //if (Input.GetKeyUp(swingKey)) StopSwing();
 
         CheckForSwingPoints();
 
@@ -101,18 +112,30 @@ public class Swinging : MonoBehaviour
     private void MyInput()
     {
         //Starting swings or grapples depends on whether or not shift is pressed
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (_input.sprint && !isSwinging)
         {
-            if (Input.GetKeyDown(swingKey)) StartGrapple();
+            if (_input.swing)
+            {
+                StartGrapple();
+                isSwinging = true;
+            }
         }
 
         else
         {
-            if (Input.GetKeyDown(swingKey)) StartSwing();
+            if (_input.swing && !isSwinging)
+            {
+                StartSwing();
+                isSwinging = true;
+            }
         }
 
         //stopping is always possible
-        if (Input.GetKeyUp(swingKey)) StopSwing();
+        if (!_input.swing && isSwinging)
+        {
+            StopSwing();
+            isSwinging = false;
+        }
     }
 
     #region Swinging
@@ -212,13 +235,20 @@ public class Swinging : MonoBehaviour
 
     private void SwingingMovement()
     {
+        bool isWPressed = _input.move.y > 0;
+        bool isAPressed = _input.move.x < 0;
+        bool isSPressed = _input.move.y < 0;
+        bool isDPressed = _input.move.x > 0;
+
+        
+
         //right
-        if (Input.GetKey(KeyCode.D)) rb.AddForce(orientation.right * horizontalThrustForce * Time.deltaTime);
+        if (isDPressed) rb.AddForce(orientation.right * horizontalThrustForce * Time.deltaTime);
         //left
-        if (Input.GetKey(KeyCode.A)) rb.AddForce(-orientation.right * horizontalThrustForce * Time.deltaTime);
+        if (isAPressed) rb.AddForce(-orientation.right * horizontalThrustForce * Time.deltaTime);
 
         //forward
-        if (Input.GetKey(KeyCode.W)) rb.AddForce(orientation.forward * forwardThrustForce * Time.deltaTime);
+        if (isWPressed) rb.AddForce(orientation.forward * forwardThrustForce * Time.deltaTime);
 
         //shorten cable
         if (Input.GetKey(KeyCode.Q))
@@ -234,7 +264,7 @@ public class Swinging : MonoBehaviour
         }
 
         //extend cable
-        if (Input.GetKey(KeyCode.S))
+        if (isSPressed)
         {
             float extendedDistanceFromPoint = Vector3.Distance(transform.position, swingPoint) + extendCableSpeed;
 
