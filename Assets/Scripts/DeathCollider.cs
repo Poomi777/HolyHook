@@ -5,8 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class DeathCollider : MonoBehaviour
 {
-    void OnTriggerEnter()
+    void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if (other.tag == "Player")
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }
