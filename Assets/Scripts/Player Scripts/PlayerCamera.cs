@@ -10,6 +10,7 @@ public class PlayerCamera : MonoBehaviour
 {
     public float sensX;
     public float sensY;
+    public float controllerSensitivity;
     public float multiplier;
 
     public Transform orientation;
@@ -64,9 +65,12 @@ public class PlayerCamera : MonoBehaviour
         {
 
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+            float xSens = IsCurrentDeviceMouse ? sensX : controllerSensitivity;
+            float ySens = IsCurrentDeviceMouse ? sensY : controllerSensitivity;
+
             // get mouse input
-            float mouseX = _input.look.x * sensX * deltaTimeMultiplier;
-            float mouseY = _input.look.y * sensY * deltaTimeMultiplier;
+            float mouseX = _input.look.x * xSens * deltaTimeMultiplier;
+            float mouseY = _input.look.y * ySens * deltaTimeMultiplier;
 
             yRotation += mouseX * multiplier;
 

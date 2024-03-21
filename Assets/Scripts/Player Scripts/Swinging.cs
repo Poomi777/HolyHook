@@ -251,7 +251,7 @@ public class Swinging : MonoBehaviour
         if (isWPressed) rb.AddForce(orientation.forward * forwardThrustForce * Time.deltaTime);
 
         //shorten cable
-        if (Input.GetKey(KeyCode.Q))
+        if (_input.shorten)
         {
             Vector3 directionToPoint = swingPoint - transform.position;
             rb.AddForce(directionToPoint.normalized * forwardThrustForce * Time.deltaTime);
@@ -260,7 +260,7 @@ public class Swinging : MonoBehaviour
 
             joint.maxDistance = distanceFromPoint * 0.8f;
             joint.minDistance = distanceFromPoint * 0.25f;
-
+            _input.shorten = false;
         }
 
         //extend cable
