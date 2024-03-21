@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 547974735831472457}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -44, y: 27, z: -406}
-  m_LocalScale: {x: 658.6851, y: 658.6851, z: 658.6851}
+  m_LocalPosition: {x: -70, y: 39, z: -370}
+  m_LocalScale: {x: 606.2867, y: 606.2867, z: 606.2867}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5532460031509995099}
@@ -543,7 +543,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -393, y: -215}
+  m_AnchoredPosition: {x: -363, y: -215}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5125864825529926741
@@ -574,7 +574,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 81df9eccfce38804aa96f2eb47653138, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a3d184ab05a7d194bb465a05a14b5535, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -719,11 +719,13 @@ MonoBehaviour:
   walkSpeed: 5
   sprintSpeed: 8
   swingSpeed: 17
+  airSpeed: 17
   groundDrag: 6
   jumpForce: 7
   jumpCooldown: 0.25
   airMultiplier: 0.3
   canDoubleJumpTimeout: 0.3
+  readyToDoubleJump: 0
   jumpKey: 32
   sprintKey: 304
   crouchKey: 306
@@ -1564,7 +1566,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -28.1, y: -14}
+  m_AnchoredPosition: {x: -33.5, y: -8.9}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7127995684604891247
@@ -1698,7 +1700,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -28.1, y: -14}
+  m_AnchoredPosition: {x: -33.5, y: -8.9}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6495466865316886054

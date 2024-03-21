@@ -82,6 +82,11 @@ public class PlayerController : MonoBehaviour
 
     private StarterAssetsInputs _input;
 
+
+    // Escape stuff, feel free 
+
+    public Vector3 oldVelocity;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -148,6 +153,17 @@ public class PlayerController : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
+        if (!freeze && Input.GetKeyDown(KeyCode.Escape))
+        {
+            freeze = true;
+        }
+
+        if (!freeze && Input.GetKeyDown(KeyCode.Escape))
+        {
+            freeze = false;
+            rb.velocity = oldVelocity;
+        }
+
         // // start crouch
         // if (Input.GetKeyDown(crouchKey))
         // {
@@ -169,6 +185,7 @@ public class PlayerController : MonoBehaviour
         {
             state = MovementState.freeze;
             moveSpeed = 0;
+            oldVelocity = rb.velocity;
             rb.velocity = Vector3.zero;
         }
 
