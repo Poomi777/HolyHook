@@ -28,6 +28,8 @@ public class Swinging : MonoBehaviour
     public float grappleDelayTime;
     public float overshootYAxis;
 
+    private bool isGrappleActive = false;
+
 
     [Header("Cooldown")]
     public float grapplingCd;
@@ -114,10 +116,11 @@ public class Swinging : MonoBehaviour
         //Starting swings or grapples depends on whether or not shift is pressed
         if (_input.sprint && !isSwinging)
         {
-            if (_input.swing)
+            if (_input.swing && grapplingCdTimer <= 0f)
             {
                 StartGrapple();
                 isSwinging = true;
+                grapplingCdTimer = grapplingCd;
             }
         }
 
@@ -156,9 +159,6 @@ public class Swinging : MonoBehaviour
 
         CancelActiveGrapple();
         playerMovement.ResetRestrictions();
-
-        //GetComponent<GrapplingGun2>().StopGrapple();
-        //SplayerMovement.ResetRestrictions();
         
         playerMovement.swinging = true;
 
@@ -167,11 +167,11 @@ public class Swinging : MonoBehaviour
         joint.autoConfigureConnectedAnchor = false;
         joint.connectedAnchor = swingPoint;
 
-        float distanceFromPoint = Vector3.Distance(player.position, swingPoint) - 5f;
+        float distanceFromPoint = Vector3.Distance(player.position, swingPoint);
 
         //distance grapple will try to keep from grapple point
         joint.maxDistance = distanceFromPoint * 0.8f;
-        joint.minDistance = distanceFromPoint * 0.25f;
+        joint.minDistance = distanceFromPoint * 0.15f;
 
 
         //customize these as we like
@@ -221,19 +221,6 @@ public class Swinging : MonoBehaviour
         
     }
 
-    // public void StopSwing()
-    // {
-    //     Debug.Log("StopSwing called");
-    //     playerMovement.swinging = false;
-    //     if (joint != null)
-    //     {
-    //         Debug.Log("Destroying joint");
-    //         Destroy(joint);
-    //         joint = null; // Nullify the joint reference
-    //     }
-    //     lineRenderer.positionCount = 0;
-    // }
-
     private void SwingingMovement()
     {
         bool isWPressed = _input.move.y > 0;
@@ -257,11 +244,11 @@ public class Swinging : MonoBehaviour
             Vector3 directionToPoint = swingPoint - transform.position;
             rb.AddForce(directionToPoint.normalized * forwardThrustForce * Time.deltaTime);
 
-            float distanceFromPoint = Vector3.Distance(transform.position, swingPoint) - 5f;
+            float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
 
             joint.maxDistance = distanceFromPoint * 0.8f;
-            joint.minDistance = distanceFromPoint * 0.25f;
-            _input.shorten = false;
+            joint.minDistance = distanceFromPoint * 0.15f;
+            //_input.shorten = false;
         }
 
         //extend cable
@@ -270,7 +257,7 @@ public class Swinging : MonoBehaviour
             float extendedDistanceFromPoint = Vector3.Distance(transform.position, swingPoint) + extendCableSpeed;
 
             joint.maxDistance = extendedDistanceFromPoint * 0.8f;
-            joint.minDistance = extendedDistanceFromPoint * 0.25f;
+            joint.minDistance = extendedDistanceFromPoint * 0.15f;
         }
     }
 
@@ -340,10 +327,18 @@ public class Swinging : MonoBehaviour
         }
 
         CancelActiveSwing();
+        isGrappleActive = true;
+
+        spring.SetStrength(strength); // How 'strong' the spring pulls back to its target state.
+        spring.SetDamper(damper); // Damping to slow down the animation over time.
+        spring.SetVelocity(animationVelocity);
 
 
         if (predictionHit.point != Vector3.zero)
         {
+            lineRenderer.positionCount = 2;
+            currentGrapplePosition = gunTip.position;
+
             swingPoint = predictionHit.point;
 
             Invoke(nameof(ExecuteGrapple), grappleDelayTime);
@@ -355,9 +350,7 @@ public class Swinging : MonoBehaviour
 
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
-
-        //lineRenderer.enabled = true;
-        //lineRenderer.SetPosition(1, grapplePoint);
+        grapplingCdTimer = grapplingCd;
 
         PlayRandomSound();
     }
@@ -387,10 +380,10 @@ public class Swinging : MonoBehaviour
         //the thing that unfreezes player when the grappling is stopped
         //playermovement.freeze = false;
         playerMovement.ResetRestrictions();
+        isGrappleActive = false;
 
         grapplingCdTimer = grapplingCd;
 
-        //lineRenderer.enabled = false;
     }
 
     #endregion
@@ -420,7 +413,28 @@ public class Swinging : MonoBehaviour
 
         // lineRenderer.SetPosition(0, gunTip.position);
         // lineRenderer.SetPosition(1, swingPoint);
+        if (!joint && !isGrappleActive)
+        {
+            if (lineRenderer.positionCount > 0)
+            {
+                lineRenderer.positionCount = 0;
+            }
+            return;
+        }
 
+        
+        if (isGrappleActive && !joint)
+        {
+            
+            lineRenderer.positionCount = 2;
+            
+            lineRenderer.SetPosition(0, gunTip.position);
+            lineRenderer.SetPosition(1, swingPoint);
+
+            AnimateGrapple(swingPoint);
+            return;
+        }
+        
         if (!joint)
         {
             currentGrapplePosition = gunTip.position;
@@ -457,6 +471,25 @@ public class Swinging : MonoBehaviour
         }
 
 
+    }
+
+    private void AnimateGrapple(Vector3 targetPosition)
+    {
+        if (lineRenderer.positionCount != quality + 1)
+        {
+            lineRenderer.positionCount = quality + 1;
+        }
+
+        spring.Update(Time.deltaTime);
+        Vector3 swingDirection = (targetPosition - gunTip.position).normalized;
+        Vector3 up = Quaternion.LookRotation(swingDirection) * Vector3.up;
+
+        for (int i = 0; i < quality + 1; i++)
+        {
+            float delta = i / (float)quality;
+            Vector3 offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
+            lineRenderer.SetPosition(i, Vector3.Lerp(gunTip.position, targetPosition, delta) + offset);
+        }
     }
 
     void PlayRandomSound()
