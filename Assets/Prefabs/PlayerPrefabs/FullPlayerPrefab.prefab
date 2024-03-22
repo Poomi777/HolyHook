@@ -821,6 +821,17 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a535d6dab7ac77645ae3353d7ceacd00, type: 3}
   - {fileID: 8300000, guid: edd154a64b082984d865d4cadefdd3c1, type: 3}
   - {fileID: 8300000, guid: bc6b8bf94fc23844ba706e39e756c1f9, type: 3}
+  grappleObjectKey: 324
+  grappledObject: {fileID: 0}
+  whatIsGrappleObject:
+    serializedVersion: 2
+    m_Bits: 256
+  objectGrappleSpring: 4.5
+  objectGrappleDamper: 7
+  objectGrappleMassScale: 0
+  objectConnectedMassScale: 0.7
+  maxObjectGrappleDistance: 25
+  isObjectGrappleActive: 0
 --- !u!114 &5319667187337036735
 MonoBehaviour:
   m_ObjectHideFlags: 0

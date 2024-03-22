@@ -75,7 +75,8 @@ public class Swinging : MonoBehaviour
     public LayerMask whatIsGrappleObject; //layer mask defining which objects can be grappled
     public float objectGrappleSpring = 4.5f;
     public float objectGrappleDamper = 7f;
-    public float objectGrappleMassScale = 4.5f;
+    public float objectGrappleMassScale = 0.1f;
+    public float objectConnectedMassScale = 0.1f;
     public float maxObjectGrappleDistance = 25f; //maximum distance to grapple an object
 
     public bool isObjectGrappleActive = false;
@@ -463,6 +464,7 @@ public class Swinging : MonoBehaviour
             objectJoint.spring = objectGrappleSpring;
             objectJoint.damper = objectGrappleDamper;
             objectJoint.massScale = objectGrappleMassScale;
+            objectJoint.connectedMassScale = objectConnectedMassScale;
 
             //adjust these as we want
             objectJoint.maxDistance = Vector3.Distance(player.position, grappledObject.position) * 0.8f;

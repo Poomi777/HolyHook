@@ -1486,6 +1486,18 @@ PrefabInstance:
       value: FullPlayerPrefab
       objectReference: {fileID: 0}
     - target: {fileID: 8443737837676135401, guid: e6a7c185de2decb40b931a639b8591a4, type: 3}
+      propertyPath: objectGrappleMassScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8443737837676135401, guid: e6a7c185de2decb40b931a639b8591a4, type: 3}
+      propertyPath: objectConnectedMassScale
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8443737837676135401, guid: e6a7c185de2decb40b931a639b8591a4, type: 3}
+      propertyPath: whatIsGrappleObject.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 8443737837676135401, guid: e6a7c185de2decb40b931a639b8591a4, type: 3}
       propertyPath: WhatIsObjectGrappleable.m_Bits
       value: 256
       objectReference: {fileID: 0}
@@ -2004,7 +2016,6 @@ GameObject:
   - component: {fileID: 2042753470}
   - component: {fileID: 2042753469}
   - component: {fileID: 2042753473}
-  - component: {fileID: 2042753474}
   m_Layer: 8
   m_Name: Hookable Object
   m_TagString: Untagged
@@ -2108,7 +2119,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2042753468}
   serializedVersion: 4
-  m_Mass: 0.8
+  m_Mass: 1.1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -2124,21 +2135,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &2042753474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2042753468}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4105a1d6cefce1c49b0c74b1e822e26d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_CollisionDetection: 1
 --- !u!33 &33325208752117722
 MeshFilter:
   m_ObjectHideFlags: 0
