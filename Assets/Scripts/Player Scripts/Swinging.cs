@@ -125,6 +125,11 @@ public class Swinging : MonoBehaviour
     void LateUpdate()
     {
         DrawRope();
+
+        if (grappledObject)
+        {
+            AnimateGrappleObject(grappledObject);
+        }
     }
 
     private void MyInput()
@@ -462,7 +467,18 @@ public class Swinging : MonoBehaviour
             //adjust these as we want
             objectJoint.maxDistance = Vector3.Distance(player.position, grappledObject.position) * 0.8f;
             objectJoint.minDistance = 0.30f;
+
+            // Initialize the line renderer for the grapple object
+            if (lineRenderer != null && grappledObject != null)
+            {
+                lineRenderer.positionCount = 2;
+                lineRenderer.SetPosition(0, gunTip.position);
+                lineRenderer.SetPosition(1, grappledObject.position);
+            }
         }
+
+
+        
     }
 
     void DragGrappleObject()
@@ -491,6 +507,12 @@ public class Swinging : MonoBehaviour
             Destroy(objectJoint);
             objectJoint = null;
             grappledObject = null;
+
+            // Reset the line renderer when the grapple is released
+            if (lineRenderer != null)
+            {
+                lineRenderer.positionCount = 0;
+            }
         }
     }
 
@@ -585,20 +607,6 @@ public class Swinging : MonoBehaviour
             lineRenderer.SetPosition(i, Vector3.Lerp(gunTip.position, currentGrapplePosition, delta) + offset);
         }
 
-        // Update the line for the grappled object
-        if (objectJoint != null && grappledObject != null)
-        {
-            if (lineRenderer.positionCount != 2)
-            {
-                lineRenderer.positionCount = 2;
-            }
-
-            Vector3 worldAnchor = grappledObject.TransformPoint(objectJoint.connectedAnchor);
-            lineRenderer.SetPosition(0, gunTip.position);
-            lineRenderer.SetPosition(1, worldAnchor);
-        }
-
-
     }
 
     private void AnimateGrapple(Vector3 targetPosition)
@@ -617,6 +625,31 @@ public class Swinging : MonoBehaviour
             float delta = i / (float)quality;
             Vector3 offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
             lineRenderer.SetPosition(i, Vector3.Lerp(gunTip.position, targetPosition, delta) + offset);
+        }
+    }
+
+    private void AnimateGrappleObject(Transform targetTransform)
+    {
+        if (isObjectGrappleActive && grappledObject != null)
+        {
+            if (lineRenderer.positionCount != quality + 1)
+            {
+                lineRenderer.positionCount = quality + 1;
+            }
+
+            
+            Vector3 targetPosition = targetTransform.position;
+            Vector3 swingDirection = (targetPosition - gunTip.position).normalized;
+            Vector3 up = Quaternion.LookRotation(swingDirection) * Vector3.up;
+
+            spring.Update(Time.deltaTime);
+
+            for (int i = 0; i < quality + 1; i++)
+            {
+                float delta = i / (float)quality;
+                Vector3 offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
+                lineRenderer.SetPosition(i, Vector3.Lerp(gunTip.position, targetPosition, delta) + offset);
+            }
         }
     }
 
