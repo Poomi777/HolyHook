@@ -83,12 +83,14 @@ public class PlayerController : MonoBehaviour
     private StarterAssetsInputs _input;
 
 
-    // Escape stuff, feel free 
+    // Escape stuff, feel free to change
 
-    public Vector3 oldVelocity;
+    public bool paused;
+    public GameObject pauseScreen;
 
     private void Start()
     {
+        Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
         _input = GetComponent<StarterAssetsInputs>();
         rb.freezeRotation = true;
@@ -153,15 +155,9 @@ public class PlayerController : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-        if (!freeze && Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.P)) // NEEDS TO BE CHANGED TO STANDARD KEY, DUNNO HOW TO DO - Ágúst
         {
-            freeze = true;
-        }
-
-        if (!freeze && Input.GetKeyDown(KeyCode.Escape))
-        {
-            freeze = false;
-            rb.velocity = oldVelocity;
+            PauseGame();
         }
 
         // // start crouch
@@ -178,6 +174,28 @@ public class PlayerController : MonoBehaviour
         // }
     }
 
+    public void PauseGame() // Needs to be it's own function so that the pause screen can deactivate pause as well
+    {
+        if (paused)
+            {
+                pauseScreen.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+
+                paused = !paused;
+                Time.timeScale = 1;
+                Cursor.visible = false;
+            }
+            else if (!paused)
+            {
+                pauseScreen.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+
+                paused = !paused;
+                Time.timeScale = 0;
+                Cursor.visible = true;
+            }
+    }
+
     private void StateHandler()
     {
         // Mode - Freeze
@@ -185,7 +203,6 @@ public class PlayerController : MonoBehaviour
         {
             state = MovementState.freeze;
             moveSpeed = 0;
-            oldVelocity = rb.velocity;
             rb.velocity = Vector3.zero;
         }
 

@@ -16,4 +16,10 @@ public class MenuScreenLoader : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void UnpauseGame()
+    {
+        GameObject player = GameObject.Find("Player");
+        player.GetComponent<PlayerController>().PauseGame();
+    }
 }
