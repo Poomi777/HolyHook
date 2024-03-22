@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -38570,166 +38570,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1837975980264942583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917678799648517839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 417854d7e7cc37a4d9f923c0c34b39b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distanceTilAttack: 2.5
-  attackCooldown: 1.5
-  durationOfAttack: 0.5
-  damage: 10
---- !u!114 &1837975980501307972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917678799412500348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 417854d7e7cc37a4d9f923c0c34b39b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distanceTilAttack: 2.5
-  attackCooldown: 1.5
-  durationOfAttack: 0.5
-  damage: 10
---- !u!114 &1837975980973095356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917678798948891780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 417854d7e7cc37a4d9f923c0c34b39b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distanceTilAttack: 2.5
-  attackCooldown: 1.5
-  durationOfAttack: 0.5
-  damage: 10
---- !u!114 &1837975981267524528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917678798637768328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 417854d7e7cc37a4d9f923c0c34b39b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distanceTilAttack: 2.5
-  attackCooldown: 1.5
-  durationOfAttack: 0.5
-  damage: 10
---- !u!114 &1837975981270327797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917678798643258573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 417854d7e7cc37a4d9f923c0c34b39b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distanceTilAttack: 2.5
-  attackCooldown: 1.5
-  durationOfAttack: 0.5
-  damage: 10
---- !u!114 &1837975981310471208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917678798611507472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 417854d7e7cc37a4d9f923c0c34b39b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distanceTilAttack: 2.5
-  attackCooldown: 1.5
-  durationOfAttack: 0.5
-  damage: 10
---- !u!114 &1837975981413807779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917678800664146843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 417854d7e7cc37a4d9f923c0c34b39b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distanceTilAttack: 2.5
-  attackCooldown: 1.5
-  durationOfAttack: 0.5
-  damage: 10
---- !u!114 &1837975981544877106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917678800524683530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 417854d7e7cc37a4d9f923c0c34b39b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distanceTilAttack: 2.5
-  attackCooldown: 1.5
-  durationOfAttack: 0.5
-  damage: 10
---- !u!114 &1837975981913398938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917678800156056482}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 417854d7e7cc37a4d9f923c0c34b39b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distanceTilAttack: 2.5
-  attackCooldown: 1.5
-  durationOfAttack: 0.5
-  damage: 10
---- !u!114 &1837975982077456747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1917678799983588435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 417854d7e7cc37a4d9f923c0c34b39b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distanceTilAttack: 2.5
-  attackCooldown: 1.5
-  durationOfAttack: 0.5
-  damage: 10
 --- !u!1 &1856240305356990802
 GameObject:
   m_ObjectHideFlags: 0
@@ -38943,7 +38783,6 @@ GameObject:
   - component: {fileID: 6263668078105549286}
   - component: {fileID: 580282930661408256}
   - component: {fileID: 1150549041772396028}
-  - component: {fileID: 1837975981310471208}
   - component: {fileID: 4528603787123060868}
   - component: {fileID: 322899495773919799}
   m_Layer: 9
@@ -38966,7 +38805,6 @@ GameObject:
   - component: {fileID: 6263668078081224318}
   - component: {fileID: 580282930637097368}
   - component: {fileID: 1150549041731406436}
-  - component: {fileID: 1837975981267524528}
   - component: {fileID: 4528603787080107804}
   - component: {fileID: 322899495733079471}
   m_Layer: 9
@@ -38989,7 +38827,6 @@ GameObject:
   - component: {fileID: 6263668078073861179}
   - component: {fileID: 580282930634372061}
   - component: {fileID: 1150549041737035809}
-  - component: {fileID: 1837975981270327797}
   - component: {fileID: 4528603787074600281}
   - component: {fileID: 322899495730108394}
   m_Layer: 9
@@ -39012,7 +38849,6 @@ GameObject:
   - component: {fileID: 6263668078438206578}
   - component: {fileID: 580282930327694228}
   - component: {fileID: 1150549041573947496}
-  - component: {fileID: 1837975980973095356}
   - component: {fileID: 4528603786919896336}
   - component: {fileID: 322899495978127267}
   m_Layer: 9
@@ -39035,7 +38871,6 @@ GameObject:
   - component: {fileID: 6263668078914152330}
   - component: {fileID: 580282929859870828}
   - component: {fileID: 1150549040963552144}
-  - component: {fileID: 1837975980501307972}
   - component: {fileID: 4528603787379314408}
   - component: {fileID: 322899495493772379}
   m_Layer: 9
@@ -39058,7 +38893,6 @@ GameObject:
   - component: {fileID: 6263668079083839033}
   - component: {fileID: 580282929626364383}
   - component: {fileID: 1150549041131813411}
-  - component: {fileID: 1837975980264942583}
   - component: {fileID: 4528603787277170523}
   - component: {fileID: 322899495258971624}
   m_Layer: 9
@@ -39081,7 +38915,6 @@ GameObject:
   - component: {fileID: 6263668077271418021}
   - component: {fileID: 580282931437855555}
   - component: {fileID: 1150549040394051775}
-  - component: {fileID: 1837975982077456747}
   - component: {fileID: 4528603787881721287}
   - component: {fileID: 322899494923994996}
   m_Layer: 9
@@ -39104,7 +38937,6 @@ GameObject:
   - component: {fileID: 6263668077502622548}
   - component: {fileID: 580282931266423986}
   - component: {fileID: 1150549040632581966}
-  - component: {fileID: 1837975981913398938}
   - component: {fileID: 4528603787860197942}
   - component: {fileID: 322899494768339077}
   m_Layer: 9
@@ -39127,7 +38959,6 @@ GameObject:
   - component: {fileID: 6263668077803870716}
   - component: {fileID: 580282930896633370}
   - component: {fileID: 1150549039861284326}
-  - component: {fileID: 1837975981544877106}
   - component: {fileID: 4528603788431208606}
   - component: {fileID: 322899494399810093}
   m_Layer: 9
@@ -39150,7 +38981,6 @@ GameObject:
   - component: {fileID: 6263668077930742637}
   - component: {fileID: 580282930759263371}
   - component: {fileID: 1150549040000739191}
-  - component: {fileID: 1837975981413807779}
   - component: {fileID: 4528603788291746319}
   - component: {fileID: 322899494262440124}
   m_Layer: 9
@@ -39305,7 +39135,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f3a41175dd9c5a140a12120dcaa428e0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -43391,7 +43221,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f3a41175dd9c5a140a12120dcaa428e0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -43833,7 +43663,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f3a41175dd9c5a140a12120dcaa428e0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
