@@ -78,6 +78,8 @@ public class Swinging : MonoBehaviour
     public float objectGrappleMassScale = 4.5f;
     public float maxObjectGrappleDistance = 25f; //maximum distance to grapple an object
 
+    public bool isObjectGrappleActive = false;
+
 
     void Awake()
     {
@@ -116,6 +118,7 @@ public class Swinging : MonoBehaviour
         {
             DragGrappleObject();
         }
+        
 
     }
 
@@ -126,17 +129,8 @@ public class Swinging : MonoBehaviour
 
     private void MyInput()
     {
-        if (Input.GetKeyDown(grappleObjectKey))
-        {
-            StartGrappleObject();
-        }
-
-        else if (Input.GetKeyUp(grappleObjectKey)) 
-        {
-            ReleaseGrappleObject();
-        }
-
         //Starting swings or grapples depends on whether or not shift is pressed
+
         if (_input.sprint && !isSwinging)
         {
             if (_input.swing && grapplingCdTimer <= 0f)
@@ -155,6 +149,20 @@ public class Swinging : MonoBehaviour
                 isSwinging = true;
             }
         }
+        
+
+        if (Input.GetKeyDown(grappleObjectKey))
+        {
+            StartGrappleObject();
+            isObjectGrappleActive = true;
+        }
+
+        else if (Input.GetKeyUp(grappleObjectKey)) 
+        {
+            ReleaseGrappleObject();
+            isObjectGrappleActive = false;
+        }
+
 
         //stopping is always possible
         if (!_input.swing && isSwinging)
@@ -432,11 +440,20 @@ public class Swinging : MonoBehaviour
          RaycastHit hit;
         if (Physics.Raycast(cam.position, cam.forward, out hit, maxObjectGrappleDistance, whatIsGrappleObject))
         {
+            // Clean up any existing swing joint before initiating object grapple
+            //without this, we would be stuck to the initial swing point where we grappled the object
+            //and the swing point will not move even though the object moved, essentially making us stuck to an invisible spot
+            DestroySwingJoint();
+
             grappledObject = hit.transform;
             objectJoint = player.gameObject.AddComponent<SpringJoint>();
+
             objectJoint.connectedBody = grappledObject.GetComponent<Rigidbody>();
+            // Set the connected anchor in the object's local space
+            objectJoint.connectedAnchor = grappledObject.InverseTransformPoint(hit.point);
+            //objectJoint.connectedBody = grappledObject.GetComponent<Rigidbody>();
             objectJoint.autoConfigureConnectedAnchor = false;
-            objectJoint.connectedAnchor = hit.point - grappledObject.position;
+            //objectJoint.connectedAnchor = hit.point - grappledObject.position;
 
             objectJoint.spring = objectGrappleSpring;
             objectJoint.damper = objectGrappleDamper;
@@ -444,7 +461,7 @@ public class Swinging : MonoBehaviour
 
             //adjust these as we want
             objectJoint.maxDistance = Vector3.Distance(player.position, grappledObject.position) * 0.8f;
-            objectJoint.minDistance = 0.10f;
+            objectJoint.minDistance = 0.30f;
         }
     }
 
@@ -474,6 +491,26 @@ public class Swinging : MonoBehaviour
             Destroy(objectJoint);
             objectJoint = null;
             grappledObject = null;
+        }
+    }
+
+    private void DestroySwingJoint()
+    {
+        playerMovement.swinging = false;
+        playerMovement.readyToDoubleJump = true;
+        lineRenderer.positionCount = 0;
+        if (joint != null)
+        {
+            Destroy(joint);
+            joint = null;
+        }
+
+        // As a fallback, if for some reason the joint reference was lost,
+        // destroy any SpringJoint attached to the player.
+        SpringJoint existingJoint = player.GetComponent<SpringJoint>();
+        if (existingJoint != null)
+        {
+            Destroy(existingJoint);
         }
     }
 
@@ -546,6 +583,19 @@ public class Swinging : MonoBehaviour
             float delta = i / (float)quality;
             Vector3 offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
             lineRenderer.SetPosition(i, Vector3.Lerp(gunTip.position, currentGrapplePosition, delta) + offset);
+        }
+
+        // Update the line for the grappled object
+        if (objectJoint != null && grappledObject != null)
+        {
+            if (lineRenderer.positionCount != 2)
+            {
+                lineRenderer.positionCount = 2;
+            }
+
+            Vector3 worldAnchor = grappledObject.TransformPoint(objectJoint.connectedAnchor);
+            lineRenderer.SetPosition(0, gunTip.position);
+            lineRenderer.SetPosition(1, worldAnchor);
         }
 
 
