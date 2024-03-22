@@ -28,6 +28,8 @@ public class Swinging : MonoBehaviour
     public float grappleDelayTime;
     public float overshootYAxis;
 
+    private bool isGrappleActive = false;
+
 
     [Header("Cooldown")]
     public float grapplingCd;
@@ -40,6 +42,7 @@ public class Swinging : MonoBehaviour
     public Rigidbody rb;
     public float horizontalThrustForce;
     public float forwardThrustForce;
+    public float shortenCableSpeed;
     public float extendCableSpeed;
 
     [Header("Prediction")]
@@ -64,6 +67,19 @@ public class Swinging : MonoBehaviour
     [Header("Audio")]
     public AudioClip[] swingSounds; // Array of swing sounds.
     private AudioSource audioSource;
+
+    [Header("Object Grappling")]
+    public KeyCode grappleObjectKey = KeyCode.Mouse1; //Right-click by default
+    public Transform grappledObject; //current grappled object
+    private SpringJoint objectJoint; //spring joint used for grappling objects
+    public LayerMask whatIsGrappleObject; //layer mask defining which objects can be grappled
+    public float objectGrappleSpring = 4.5f;
+    public float objectGrappleDamper = 7f;
+    public float objectGrappleMassScale = 0.1f;
+    public float objectConnectedMassScale = 0.1f;
+    public float maxObjectGrappleDistance = 25f; //maximum distance to grapple an object
+
+    public bool isObjectGrappleActive = false;
 
 
     void Awake()
@@ -90,9 +106,6 @@ public class Swinging : MonoBehaviour
     {
         MyInput();
 
-        //if (Input.GetKeyDown(swingKey)) StartSwing();
-        //if (Input.GetKeyUp(swingKey)) StopSwing();
-
         CheckForSwingPoints();
 
         if (joint != null) SwingingMovement();
@@ -102,22 +115,35 @@ public class Swinging : MonoBehaviour
             grapplingCdTimer -= Time.deltaTime;
         }
 
+        if (objectJoint != null)
+        {
+            DragGrappleObject();
+        }
+        
+
     }
 
     void LateUpdate()
     {
         DrawRope();
+
+        if (grappledObject)
+        {
+            AnimateGrappleObject(grappledObject);
+        }
     }
 
     private void MyInput()
     {
         //Starting swings or grapples depends on whether or not shift is pressed
+
         if (_input.sprint && !isSwinging)
         {
-            if (_input.swing)
+            if (_input.swing && grapplingCdTimer <= 0f)
             {
                 StartGrapple();
                 isSwinging = true;
+                grapplingCdTimer = grapplingCd;
             }
         }
 
@@ -129,6 +155,20 @@ public class Swinging : MonoBehaviour
                 isSwinging = true;
             }
         }
+        
+
+        if (Input.GetKeyDown(grappleObjectKey))
+        {
+            StartGrappleObject();
+            isObjectGrappleActive = true;
+        }
+
+        else if (Input.GetKeyUp(grappleObjectKey)) 
+        {
+            ReleaseGrappleObject();
+            isObjectGrappleActive = false;
+        }
+
 
         //stopping is always possible
         if (!_input.swing && isSwinging)
@@ -156,9 +196,6 @@ public class Swinging : MonoBehaviour
 
         CancelActiveGrapple();
         playerMovement.ResetRestrictions();
-
-        //GetComponent<GrapplingGun2>().StopGrapple();
-        //SplayerMovement.ResetRestrictions();
         
         playerMovement.swinging = true;
 
@@ -167,11 +204,11 @@ public class Swinging : MonoBehaviour
         joint.autoConfigureConnectedAnchor = false;
         joint.connectedAnchor = swingPoint;
 
-        float distanceFromPoint = Vector3.Distance(player.position, swingPoint) - 5f;
+        float distanceFromPoint = Vector3.Distance(player.position, swingPoint);
 
         //distance grapple will try to keep from grapple point
         joint.maxDistance = distanceFromPoint * 0.8f;
-        joint.minDistance = distanceFromPoint * 0.25f;
+        joint.minDistance = distanceFromPoint * 0.15f;
 
 
         //customize these as we like
@@ -221,19 +258,6 @@ public class Swinging : MonoBehaviour
         
     }
 
-    // public void StopSwing()
-    // {
-    //     Debug.Log("StopSwing called");
-    //     playerMovement.swinging = false;
-    //     if (joint != null)
-    //     {
-    //         Debug.Log("Destroying joint");
-    //         Destroy(joint);
-    //         joint = null; // Nullify the joint reference
-    //     }
-    //     lineRenderer.positionCount = 0;
-    // }
-
     private void SwingingMovement()
     {
         bool isWPressed = _input.move.y > 0;
@@ -255,13 +279,13 @@ public class Swinging : MonoBehaviour
         if (_input.shorten)
         {
             Vector3 directionToPoint = swingPoint - transform.position;
-            rb.AddForce(directionToPoint.normalized * forwardThrustForce * Time.deltaTime);
+            rb.AddForce(directionToPoint.normalized * shortenCableSpeed * Time.deltaTime);
 
-            float distanceFromPoint = Vector3.Distance(transform.position, swingPoint) - 5f;
+            float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
 
             joint.maxDistance = distanceFromPoint * 0.8f;
-            joint.minDistance = distanceFromPoint * 0.25f;
-            _input.shorten = false;
+            joint.minDistance = distanceFromPoint * 0.15f;
+            //_input.shorten = false;
         }
 
         //extend cable
@@ -270,7 +294,7 @@ public class Swinging : MonoBehaviour
             float extendedDistanceFromPoint = Vector3.Distance(transform.position, swingPoint) + extendCableSpeed;
 
             joint.maxDistance = extendedDistanceFromPoint * 0.8f;
-            joint.minDistance = extendedDistanceFromPoint * 0.25f;
+            joint.minDistance = extendedDistanceFromPoint * 0.15f;
         }
     }
 
@@ -340,10 +364,18 @@ public class Swinging : MonoBehaviour
         }
 
         CancelActiveSwing();
+        isGrappleActive = true;
+
+        spring.SetStrength(strength); // How 'strong' the spring pulls back to its target state.
+        spring.SetDamper(damper); // Damping to slow down the animation over time.
+        spring.SetVelocity(animationVelocity);
 
 
         if (predictionHit.point != Vector3.zero)
         {
+            lineRenderer.positionCount = 2;
+            currentGrapplePosition = gunTip.position;
+
             swingPoint = predictionHit.point;
 
             Invoke(nameof(ExecuteGrapple), grappleDelayTime);
@@ -355,9 +387,7 @@ public class Swinging : MonoBehaviour
 
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
-
-        //lineRenderer.enabled = true;
-        //lineRenderer.SetPosition(1, grapplePoint);
+        grapplingCdTimer = grapplingCd;
 
         PlayRandomSound();
     }
@@ -387,10 +417,10 @@ public class Swinging : MonoBehaviour
         //the thing that unfreezes player when the grappling is stopped
         //playermovement.freeze = false;
         playerMovement.ResetRestrictions();
+        isGrappleActive = false;
 
         grapplingCdTimer = grapplingCd;
 
-        //lineRenderer.enabled = false;
     }
 
     #endregion
@@ -409,6 +439,108 @@ public class Swinging : MonoBehaviour
 
     #endregion
 
+    #region GrapplingObject
+
+    void StartGrappleObject()
+    {
+         RaycastHit hit;
+        if (Physics.Raycast(cam.position, cam.forward, out hit, maxObjectGrappleDistance, whatIsGrappleObject))
+        {
+            // Clean up any existing swing joint before initiating object grapple
+            //without this, we would be stuck to the initial swing point where we grappled the object
+            //and the swing point will not move even though the object moved, essentially making us stuck to an invisible spot
+            DestroySwingJoint();
+
+            grappledObject = hit.transform;
+            objectJoint = player.gameObject.AddComponent<SpringJoint>();
+
+            objectJoint.connectedBody = grappledObject.GetComponent<Rigidbody>();
+            // Set the connected anchor in the object's local space
+            objectJoint.connectedAnchor = grappledObject.InverseTransformPoint(hit.point);
+            //objectJoint.connectedBody = grappledObject.GetComponent<Rigidbody>();
+            objectJoint.autoConfigureConnectedAnchor = false;
+            //objectJoint.connectedAnchor = hit.point - grappledObject.position;
+
+            objectJoint.spring = objectGrappleSpring;
+            objectJoint.damper = objectGrappleDamper;
+            objectJoint.massScale = objectGrappleMassScale;
+            objectJoint.connectedMassScale = objectConnectedMassScale;
+
+            //adjust these as we want
+            objectJoint.maxDistance = Vector3.Distance(player.position, grappledObject.position) * 0.8f;
+            objectJoint.minDistance = 0.30f;
+
+            // Initialize the line renderer for the grapple object
+            if (lineRenderer != null && grappledObject != null)
+            {
+                lineRenderer.positionCount = 2;
+                lineRenderer.SetPosition(0, gunTip.position);
+                lineRenderer.SetPosition(1, grappledObject.position);
+            }
+        }
+
+
+        
+    }
+
+    void DragGrappleObject()
+    {
+        //calculate target position in front of the camera to drag the object towards
+        Vector3 targetPosition = cam.position + cam.forward * Vector3.Distance(cam.position, grappledObject.position);
+
+
+
+        Vector3 forceDirection = (targetPosition - grappledObject.position).normalized;
+        float forceMagnitude = 10f; // Adjust this value as needed
+        grappledObject.GetComponent<Rigidbody>().AddForce(forceDirection * forceMagnitude);
+    }
+
+    void ReleaseGrappleObject()
+    {
+        if (objectJoint != null)
+        {
+            //throw force based on mouse movement
+            Vector3 throwForce = Vector3.zero; //placeholder for throw force calculation
+            
+            //apply throw force to object's rigidbody
+            grappledObject.GetComponent<Rigidbody>().AddForce(throwForce, ForceMode.VelocityChange);
+            
+            //cleanup
+            Destroy(objectJoint);
+            objectJoint = null;
+            grappledObject = null;
+
+            // Reset the line renderer when the grapple is released
+            if (lineRenderer != null)
+            {
+                lineRenderer.positionCount = 0;
+            }
+        }
+    }
+
+    private void DestroySwingJoint()
+    {
+        playerMovement.swinging = false;
+        playerMovement.readyToDoubleJump = true;
+        lineRenderer.positionCount = 0;
+        if (joint != null)
+        {
+            Destroy(joint);
+            joint = null;
+        }
+
+        // As a fallback, if for some reason the joint reference was lost,
+        // destroy any SpringJoint attached to the player.
+        SpringJoint existingJoint = player.GetComponent<SpringJoint>();
+        if (existingJoint != null)
+        {
+            Destroy(existingJoint);
+        }
+    }
+
+    #endregion
+
+
     void DrawRope()
     {
         // if (!joint)
@@ -420,7 +552,28 @@ public class Swinging : MonoBehaviour
 
         // lineRenderer.SetPosition(0, gunTip.position);
         // lineRenderer.SetPosition(1, swingPoint);
+        if (!joint && !isGrappleActive)
+        {
+            if (lineRenderer.positionCount > 0)
+            {
+                lineRenderer.positionCount = 0;
+            }
+            return;
+        }
 
+        
+        if (isGrappleActive && !joint)
+        {
+            
+            lineRenderer.positionCount = 2;
+            
+            lineRenderer.SetPosition(0, gunTip.position);
+            lineRenderer.SetPosition(1, swingPoint);
+
+            AnimateGrapple(swingPoint);
+            return;
+        }
+        
         if (!joint)
         {
             currentGrapplePosition = gunTip.position;
@@ -456,7 +609,50 @@ public class Swinging : MonoBehaviour
             lineRenderer.SetPosition(i, Vector3.Lerp(gunTip.position, currentGrapplePosition, delta) + offset);
         }
 
+    }
 
+    private void AnimateGrapple(Vector3 targetPosition)
+    {
+        if (lineRenderer.positionCount != quality + 1)
+        {
+            lineRenderer.positionCount = quality + 1;
+        }
+
+        spring.Update(Time.deltaTime);
+        Vector3 swingDirection = (targetPosition - gunTip.position).normalized;
+        Vector3 up = Quaternion.LookRotation(swingDirection) * Vector3.up;
+
+        for (int i = 0; i < quality + 1; i++)
+        {
+            float delta = i / (float)quality;
+            Vector3 offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
+            lineRenderer.SetPosition(i, Vector3.Lerp(gunTip.position, targetPosition, delta) + offset);
+        }
+    }
+
+    private void AnimateGrappleObject(Transform targetTransform)
+    {
+        if (isObjectGrappleActive && grappledObject != null)
+        {
+            if (lineRenderer.positionCount != quality + 1)
+            {
+                lineRenderer.positionCount = quality + 1;
+            }
+
+            
+            Vector3 targetPosition = targetTransform.position;
+            Vector3 swingDirection = (targetPosition - gunTip.position).normalized;
+            Vector3 up = Quaternion.LookRotation(swingDirection) * Vector3.up;
+
+            spring.Update(Time.deltaTime);
+
+            for (int i = 0; i < quality + 1; i++)
+            {
+                float delta = i / (float)quality;
+                Vector3 offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
+                lineRenderer.SetPosition(i, Vector3.Lerp(gunTip.position, targetPosition, delta) + offset);
+            }
+        }
     }
 
     void PlayRandomSound()
