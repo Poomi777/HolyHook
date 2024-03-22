@@ -42,6 +42,7 @@ public class Swinging : MonoBehaviour
     public Rigidbody rb;
     public float horizontalThrustForce;
     public float forwardThrustForce;
+    public float shortenCableSpeed;
     public float extendCableSpeed;
 
     [Header("Prediction")]
@@ -66,6 +67,16 @@ public class Swinging : MonoBehaviour
     [Header("Audio")]
     public AudioClip[] swingSounds; // Array of swing sounds.
     private AudioSource audioSource;
+
+    [Header("Object Grappling")]
+    public KeyCode grappleObjectKey = KeyCode.Mouse1; //Right-click by default
+    public Transform grappledObject; //current grappled object
+    private SpringJoint objectJoint; //spring joint used for grappling objects
+    public LayerMask whatIsGrappleObject; //layer mask defining which objects can be grappled
+    public float objectGrappleSpring = 4.5f;
+    public float objectGrappleDamper = 7f;
+    public float objectGrappleMassScale = 4.5f;
+    public float maxObjectGrappleDistance = 25f; //maximum distance to grapple an object
 
 
     void Awake()
@@ -92,9 +103,6 @@ public class Swinging : MonoBehaviour
     {
         MyInput();
 
-        //if (Input.GetKeyDown(swingKey)) StartSwing();
-        //if (Input.GetKeyUp(swingKey)) StopSwing();
-
         CheckForSwingPoints();
 
         if (joint != null) SwingingMovement();
@@ -102,6 +110,11 @@ public class Swinging : MonoBehaviour
         if (grapplingCdTimer > 0)
         {
             grapplingCdTimer -= Time.deltaTime;
+        }
+
+        if (objectJoint != null)
+        {
+            DragGrappleObject();
         }
 
     }
@@ -113,6 +126,16 @@ public class Swinging : MonoBehaviour
 
     private void MyInput()
     {
+        if (Input.GetKeyDown(grappleObjectKey))
+        {
+            StartGrappleObject();
+        }
+
+        else if (Input.GetKeyUp(grappleObjectKey)) 
+        {
+            ReleaseGrappleObject();
+        }
+
         //Starting swings or grapples depends on whether or not shift is pressed
         if (_input.sprint && !isSwinging)
         {
@@ -242,7 +265,7 @@ public class Swinging : MonoBehaviour
         if (_input.shorten)
         {
             Vector3 directionToPoint = swingPoint - transform.position;
-            rb.AddForce(directionToPoint.normalized * forwardThrustForce * Time.deltaTime);
+            rb.AddForce(directionToPoint.normalized * shortenCableSpeed * Time.deltaTime);
 
             float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
 
@@ -401,6 +424,61 @@ public class Swinging : MonoBehaviour
 
 
     #endregion
+
+    #region GrapplingObject
+
+    void StartGrappleObject()
+    {
+         RaycastHit hit;
+        if (Physics.Raycast(cam.position, cam.forward, out hit, maxObjectGrappleDistance, whatIsGrappleObject))
+        {
+            grappledObject = hit.transform;
+            objectJoint = player.gameObject.AddComponent<SpringJoint>();
+            objectJoint.connectedBody = grappledObject.GetComponent<Rigidbody>();
+            objectJoint.autoConfigureConnectedAnchor = false;
+            objectJoint.connectedAnchor = hit.point - grappledObject.position;
+
+            objectJoint.spring = objectGrappleSpring;
+            objectJoint.damper = objectGrappleDamper;
+            objectJoint.massScale = objectGrappleMassScale;
+
+            //adjust these as we want
+            objectJoint.maxDistance = Vector3.Distance(player.position, grappledObject.position) * 0.8f;
+            objectJoint.minDistance = 0.10f;
+        }
+    }
+
+    void DragGrappleObject()
+    {
+        //calculate target position in front of the camera to drag the object towards
+        Vector3 targetPosition = cam.position + cam.forward * Vector3.Distance(cam.position, grappledObject.position);
+
+
+
+        Vector3 forceDirection = (targetPosition - grappledObject.position).normalized;
+        float forceMagnitude = 10f; // Adjust this value as needed
+        grappledObject.GetComponent<Rigidbody>().AddForce(forceDirection * forceMagnitude);
+    }
+
+    void ReleaseGrappleObject()
+    {
+        if (objectJoint != null)
+        {
+            //throw force based on mouse movement
+            Vector3 throwForce = Vector3.zero; //placeholder for throw force calculation
+            
+            //apply throw force to object's rigidbody
+            grappledObject.GetComponent<Rigidbody>().AddForce(throwForce, ForceMode.VelocityChange);
+            
+            //cleanup
+            Destroy(objectJoint);
+            objectJoint = null;
+            grappledObject = null;
+        }
+    }
+
+    #endregion
+
 
     void DrawRope()
     {

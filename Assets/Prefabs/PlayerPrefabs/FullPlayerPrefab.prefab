@@ -574,7 +574,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 81df9eccfce38804aa96f2eb47653138, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a3d184ab05a7d194bb465a05a14b5535, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -719,11 +719,13 @@ MonoBehaviour:
   walkSpeed: 5
   sprintSpeed: 8
   swingSpeed: 17
+  airSpeed: 5
   groundDrag: 6
   jumpForce: 7
   jumpCooldown: 0.25
   airMultiplier: 0.3
   canDoubleJumpTimeout: 0.3
+  readyToDoubleJump: 0
   jumpKey: 32
   sprintKey: 304
   crouchKey: 306
@@ -756,18 +758,19 @@ MonoBehaviour:
   player: {fileID: 6173696714751641252}
   WhatIsGrappleable:
     serializedVersion: 2
-    m_Bits: 129
+    m_Bits: 385
   playerMovement: {fileID: 6602474395370061581}
   swingKey: 324
   maxGrappleDistance: 25
   grappleDelayTime: 0.25
   overshootYAxis: 2
-  grapplingCd: 0
+  grapplingCd: 1
   orientation: {fileID: 1009378943926668198}
   rb: {fileID: 1169103083363428678}
   horizontalThrustForce: 300
   forwardThrustForce: 400
-  extendCableSpeed: 20
+  shortenCableSpeed: 800
+  extendCableSpeed: 80
   predictionSphereCastRadius: 1.5
   predictionPoint: {fileID: 447335906318201180}
   quality: 200
