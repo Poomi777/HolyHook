@@ -157,13 +157,13 @@ public class Swinging : MonoBehaviour
         }
         
 
-        if (Input.GetKeyDown(grappleObjectKey))
+        if (_input.swing)
         {
             StartGrappleObject();
             isObjectGrappleActive = true;
         }
 
-        else if (Input.GetKeyUp(grappleObjectKey)) 
+        else if (!_input.swing) 
         {
             ReleaseGrappleObject();
             isObjectGrappleActive = false;

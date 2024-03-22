@@ -157,9 +157,10 @@ public class PlayerController : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-        if (Input.GetKeyDown(KeyCode.P)) // NEEDS TO BE CHANGED TO STANDARD KEY, DUNNO HOW TO DO - Ágúst
+        if (_input.pause) // NEEDS TO BE CHANGED TO STANDARD KEY, DUNNO HOW TO DO - Ágúst
         {
             PauseGame();
+            _input.pause = false;
         }
 
         // // start crouch

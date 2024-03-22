@@ -52,9 +52,9 @@
                 },
                 {
                     "name": "Swing",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "b0d8d603-d158-46dd-9921-af391d6a7ed6",
-                    "expectedControlType": "Digital",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -205,7 +205,7 @@
                     "id": "d1d171b6-19d8-47a6-ba3a-71b6a8e7b3c0",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "InvertVector2(invertX=false),StickDeadzone,ScaleVector2(x=300,y=300)",
+                    "processors": "InvertVector2(invertX=false),StickDeadzone,ScaleVector2(x=300,y=400)",
                     "groups": "Gamepad",
                     "action": "Look",
                     "isComposite": false,
@@ -294,7 +294,7 @@
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
                     "action": "Swing",
                     "isComposite": false,
                     "isPartOfComposite": false
