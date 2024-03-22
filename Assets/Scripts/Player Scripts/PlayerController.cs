@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed;
     public float sprintSpeed;
     public float swingSpeed;
+    public float airSpeed;
 
     public float groundDrag;
 
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
     public float canDoubleJumpTimeout = 0.30f;
     
     bool readyToJump;
-    bool readyToDoubleJump;
+    public bool readyToDoubleJump;
 
     float canDoubleJumpDelta;
 
@@ -79,14 +80,17 @@ public class PlayerController : MonoBehaviour
     public bool activeGrapple;
     public bool swinging;
 
-    public GameObject pauseScreen;
-
     private StarterAssetsInputs _input;
 
 
+    // Escape stuff, feel free to change
+
+    public bool paused;
+    public GameObject pauseScreen;
 
     private void Start()
     {
+        Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
         _input = GetComponent<StarterAssetsInputs>();
         rb.freezeRotation = true;
@@ -153,14 +157,10 @@ public class PlayerController : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-        if (_input.pause)
+        if (Input.GetKeyDown(KeyCode.P)) // NEEDS TO BE CHANGED TO STANDARD KEY, DUNNO HOW TO DO - Ágúst
         {
-            pauseScreen.SetActive(!pauseScreen.activeSelf);
-            _input.pause = false;
+            PauseGame();
         }
-            
-        
-        
 
         // // start crouch
         // if (Input.GetKeyDown(crouchKey))
@@ -174,6 +174,28 @@ public class PlayerController : MonoBehaviour
         // {
         //     transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
         // }
+    }
+
+    public void PauseGame() // Needs to be it's own function so that the pause screen can deactivate pause as well
+    {
+        if (paused)
+            {
+                pauseScreen.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+
+                paused = !paused;
+                Time.timeScale = 1;
+                Cursor.visible = false;
+            }
+            else if (!paused)
+            {
+                pauseScreen.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+
+                paused = !paused;
+                Time.timeScale = 0;
+                Cursor.visible = true;
+            }
     }
 
     private void StateHandler()
@@ -228,6 +250,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             state = MovementState.air;
+            moveSpeed = airSpeed;
         }
 
         if (!grounded)
