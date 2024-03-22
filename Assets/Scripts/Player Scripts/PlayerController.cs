@@ -79,7 +79,11 @@ public class PlayerController : MonoBehaviour
     public bool activeGrapple;
     public bool swinging;
 
+    public GameObject pauseScreen;
+
     private StarterAssetsInputs _input;
+
+
 
     private void Start()
     {
@@ -124,6 +128,8 @@ public class PlayerController : MonoBehaviour
         horizontalInput = _input.move.x;
         verticalInput = _input.move.y;
 
+        
+
         // when to jump
         if (_input.jump && readyToJump && grounded)
         {
@@ -146,6 +152,15 @@ public class PlayerController : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+
+        if (_input.pause)
+        {
+            pauseScreen.SetActive(!pauseScreen.activeSelf);
+            _input.pause = false;
+        }
+            
+        
+        
 
         // // start crouch
         // if (Input.GetKeyDown(crouchKey))

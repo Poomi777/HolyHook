@@ -15,6 +15,7 @@ namespace StarterAssets
 		public bool crouch;
 		public bool swing;
 		public bool shorten;
+		public bool pause;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -61,6 +62,11 @@ namespace StarterAssets
         {
             ShortenInput(value.isPressed);
         }
+
+        public void OnPause(InputValue value)
+        {
+            PauseInput(value.isPressed);
+        }
 #endif
 
 
@@ -97,6 +103,11 @@ namespace StarterAssets
         public void ShortenInput(bool newShortenState)
         {
             shorten = newShortenState;
+        }
+
+        public void PauseInput(bool newPauseState)
+        {
+            pause = newPauseState;
         }
 
         private void OnApplicationFocus(bool hasFocus)
