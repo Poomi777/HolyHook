@@ -28191,6 +28191,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6602474395370061581, guid: e6a7c185de2decb40b931a639b8591a4, type: 3}
+      propertyPath: airSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602474395370061581, guid: e6a7c185de2decb40b931a639b8591a4, type: 3}
+      propertyPath: walkSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602474395370061581, guid: e6a7c185de2decb40b931a639b8591a4, type: 3}
+      propertyPath: sprintSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602474395370061581, guid: e6a7c185de2decb40b931a639b8591a4, type: 3}
       propertyPath: canDoubleJumpTimeout
       value: 0.1
       objectReference: {fileID: 0}
