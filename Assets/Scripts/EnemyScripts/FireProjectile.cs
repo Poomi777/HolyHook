@@ -8,27 +8,37 @@ public class FireProjectile : MonoBehaviour
 
     public Transform bulletSpawnPoint;
     public GameObject projectileToFire;
+    private GameObject player;
     public float fireRate;
     public float projectileSpeed;
 
     private float timer = 5f;
 
-
-    private void Update()
+    private void Start()
     {
-        Fire();
+        player = GameObject.FindWithTag("Player");
+    }
+
+    private void LateUpdate()
+    {
+        timer -= Time.deltaTime;
+        RaycastHit Hit;
+        Ray ray = new Ray(transform.position, player.transform.position - transform.position);
+        Physics.Raycast(ray, out Hit, Mathf.Infinity);
+
+        if (Hit.collider.gameObject.tag == "Player")
+        {
+            Fire();
+        }
+
     }
     void Fire()
     {
-        fireRate -= Time.deltaTime;
-        if (fireRate > 0) return;
-
-        fireRate = timer;
+        if(timer > 0) { return; }
 
         GameObject projectileObject = Instantiate(projectileToFire, bulletSpawnPoint.transform.position, bulletSpawnPoint.transform.rotation) as GameObject;
-        Rigidbody projectileRig = projectileObject.GetComponent<Rigidbody>();
         
-        projectileRig.AddForce(projectileRig.transform.forward * projectileSpeed);
+        timer = fireRate;
     }
 
 }
