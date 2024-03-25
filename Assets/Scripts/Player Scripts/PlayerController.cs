@@ -1,298 +1,413 @@
+using StarterAssets;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM
-using UnityEngine.InputSystem;
-#endif
 
-namespace StarterAssets
+    //https://www.youtube.com/watch?v=TYzZsBl3OI0&t=183s&ab_channel=Dave%2FGameDevelopment 
+    //start at around 5:00 to continue the implementation
+
+public class PlayerController : MonoBehaviour
 {
-	[RequireComponent(typeof(CharacterController))]
-#if ENABLE_INPUT_SYSTEM
-	[RequireComponent(typeof(PlayerInput))]
-#endif
-	public class PlayerController : MonoBehaviour
-	{
-		[Header("Player")]
-		[Tooltip("Move speed of the character in m/s")]
-		public float MoveSpeed = 4.0f;
-		[Tooltip("Sprint speed of the character in m/s")]
-		public float SprintSpeed = 6.0f;
-		[Tooltip("Rotation speed of the character")]
-		public float RotationSpeed = 1.0f;
-		[Tooltip("Acceleration and deceleration")]
-		public float SpeedChangeRate = 10.0f;
+    [Header("Movement")]
+    private float moveSpeed;
+    public float walkSpeed;
+    public float sprintSpeed;
+    public float swingSpeed;
+    public float airSpeed;
 
-		[Space(10)]
-		[Tooltip("The height the player can jump")]
-		public float JumpHeight = 1.2f;
-		[Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
-		public float Gravity = -15.0f;
+    public float groundDrag;
 
-		[Space(10)]
-		[Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
-		public float JumpTimeout = 0.1f;
-		[Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
-		public float FallTimeout = 0.15f;
-
-		[Header("Player Grounded")]
-		[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
-		public bool Grounded = true;
-		[Tooltip("Useful for rough ground")]
-		public float GroundedOffset = -0.14f;
-		[Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
-		public float GroundedRadius = 0.5f;
-		[Tooltip("What layers the character uses as ground")]
-		public LayerMask GroundLayers;
-
-		[Header("Cinemachine")]
-		[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-		public GameObject CinemachineCameraTarget;
-		[Tooltip("How far in degrees can you move the camera up")]
-		public float TopClamp = 90.0f;
-		[Tooltip("How far in degrees can you move the camera down")]
-		public float BottomClamp = -90.0f;
-
-		// cinemachine
-		private float _cinemachineTargetPitch;
-
-		private float _speed;
-		private float _rotationVelocity;
-		private float _verticalVelocity;
-		private float _terminalVelocity = 53.0f;
-
-		// timeout deltatime
-		private float _jumpTimeoutDelta;
-		private float _fallTimeoutDelta;
-
-
-
-	
-#if ENABLE_INPUT_SYSTEM
-		private PlayerInput _playerInput;
-#endif
-		private CharacterController _controller;
-		private StarterAssetsInputs _input;
-		private GameObject _mainCamera;
-
-		private const float _threshold = 0.01f;
-
-		private bool IsCurrentDeviceMouse
-		{
-			get
-			{
-				#if ENABLE_INPUT_SYSTEM
-				return _playerInput.currentControlScheme == "KeyboardMouse";
-				#else
-				return false;
-				#endif
-			}
-		}
-
-		private void Awake()
-		{
-			// get a reference to our main camera
-			if (_mainCamera == null)
-			{
-				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-			}
-		}
-
-		private void Start()
-		{
-			_controller = GetComponent<CharacterController>();
-			_input = GetComponent<StarterAssetsInputs>();
-#if ENABLE_INPUT_SYSTEM
-			_playerInput = GetComponent<PlayerInput>();
-#else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-#endif
-
-			// reset our timeouts on start
-			_jumpTimeoutDelta = JumpTimeout;
-			_fallTimeoutDelta = FallTimeout;
-		}
-
-		private void Update()
-		{
-
-            GroundedCheck();
-            JumpAndGravity();
-            Move();
-
-        }
-
-		private void LateUpdate()
-		{
-			CameraRotation();
-		}
-
-		private void GroundedCheck()
-		{
-			// set sphere position, with offset
-			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
-			Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
-		}
-
-		private void CameraRotation()
-		{
-			// if there is an input
-			if (_input.look.sqrMagnitude >= _threshold)
-			{
-				//Don't multiply mouse input by Time.deltaTime
-				float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-				
-				_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
-				_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
-
-				// clamp our pitch rotation
-				_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-
-				// Update Cinemachine camera target pitch
-				CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
-
-				// rotate the player left and right
-				transform.Rotate(Vector3.up * _rotationVelocity);
-			}
-		}
-
-		private void Move()
-		{
-			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
-
-			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
-
-			// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-			// if there is no input, set the target speed to 0
-			if (_input.move == Vector2.zero) targetSpeed = 0.0f;
-
-			// a reference to the players current horizontal velocity
-			float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
-
-			float speedOffset = 0.1f;
-			float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
-
-			// accelerate or decelerate to target speed
-			if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
-			{
-				// creates curved result rather than a linear one giving a more organic speed change
-				// note T in Lerp is clamped, so we don't need to clamp our speed
-				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
-
-				// round speed to 3 decimal places
-				_speed = Mathf.Round(_speed * 1000f) / 1000f;
-			}
-			else
-			{
-				_speed = targetSpeed;
-			}
-
-			// normalise input direction
-			Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-
-			// note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-			// if there is a move input rotate player when the player is moving
-			if (_input.move != Vector2.zero)
-			{
-				// move
-				inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
-			}
-
-			// move the player
-			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-		}
-
-		private void JumpAndGravity()
-		{
-			if (Grounded)
-			{
-				// reset the fall timeout timer
-				_fallTimeoutDelta = FallTimeout;
-
-				// stop our velocity dropping infinitely when grounded
-				if (_verticalVelocity < 0.0f)
-				{
-					_verticalVelocity = -2f;
-				}
-
-				// Jump
-				if (_input.jump && _jumpTimeoutDelta <= 0.0f)
-				{
-					// the square root of H * -2 * G = how much velocity needed to reach desired height
-					_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-				}
-
-				// jump timeout
-				if (_jumpTimeoutDelta >= 0.0f)
-				{
-					_jumpTimeoutDelta -= Time.deltaTime;
-				}
-			}
-			else
-			{
-				// reset the jump timeout timer
-				_jumpTimeoutDelta = JumpTimeout;
-
-				// fall timeout
-				if (_fallTimeoutDelta >= 0.0f)
-				{
-					_fallTimeoutDelta -= Time.deltaTime;
-				}
-
-				// if we are not grounded, do not jump
-				_input.jump = false;
-			}
-
-			// apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
-			if (_verticalVelocity < _terminalVelocity)
-			{
-				_verticalVelocity += Gravity * Time.deltaTime;
-			}
-		}
-
-		private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
-		{
-			if (lfAngle < -360f) lfAngle += 360f;
-			if (lfAngle > 360f) lfAngle -= 360f;
-			return Mathf.Clamp(lfAngle, lfMin, lfMax);
-		}
-
-		private void OnDrawGizmosSelected()
-		{
-			Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
-			Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
-
-			if (Grounded) Gizmos.color = transparentGreen;
-			else Gizmos.color = transparentRed;
-
-			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
-			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
-		}
-
-        public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
-        {
-
-            Vector3 jumpVelocity = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
-            _verticalVelocity = jumpVelocity.y; // Set the vertical velocity for the jump
-            Vector3 horizontalMove = new Vector3(jumpVelocity.x, 0, jumpVelocity.z);
-            _controller.Move(horizontalMove * Time.deltaTime); // Apply the initial horizontal movement
-
-        }
-
-        public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
-        {
-            float gravity = Physics.gravity.y;
-            float displacementY = endPoint.y - startPoint.y;
-            Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
-
-            Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
-            Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity) 
-                + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
-
-            return velocityXZ + velocityY;
-        }
-
-	}
-
+    [Header("Jumping")]
+    public float jumpForce;
+    public float jumpCooldown;
+    public float airMultiplier;
+    public float canDoubleJumpTimeout = 0.30f;
     
+    bool readyToJump;
+    public bool readyToDoubleJump;
+
+    float canDoubleJumpDelta;
+
+    // [Header("Crouching")]
+    // public float crouchSpeed;
+    // public float crouchYScale;
+    // private float startYScale;
+
+    [Header("Keybinds")]
+    public KeyCode jumpKey = KeyCode.Space;
+    public KeyCode sprintKey = KeyCode.LeftShift;
+    public KeyCode crouchKey = KeyCode.LeftControl;
+
+    [Header("Ground Check")]
+    public float playerHeight;
+    public LayerMask whatIsGround;
+    bool grounded;
+
+    // [Header("Slope Handling")]
+    // public float maxSlopeAngle;
+    // private RaycastHit slopeHit;
+    // private bool exitingSlope;
+
+    [Header("Camera Effects")]
+    public PlayerCamera cam;
+    public float grappleFov = 95f;
+
+    public Transform orientation;
+
+    float horizontalInput;
+    float verticalInput;
+
+    Vector3 moveDirection;
+
+    Rigidbody rb;
+
+    public MovementState state;
+    public enum MovementState
+    {
+        freeze,
+        grappling,
+        swinging,
+        walking,
+        sprinting,
+        crouching,
+        air
+    }
+
+    public bool freeze;
+
+    private bool enableMovementOnNextTouch;
+
+    public bool activeGrapple;
+    public bool swinging;
+
+    private StarterAssetsInputs _input;
+
+
+    // Escape stuff, feel free to change
+
+    public bool paused;
+    public GameObject pauseScreen;
+
+    private void Start()
+    {
+        Cursor.visible = false;
+        rb = GetComponent<Rigidbody>();
+        _input = GetComponent<StarterAssetsInputs>();
+        rb.freezeRotation = true;
+
+        readyToJump = true;
+        readyToDoubleJump = false;
+        canDoubleJumpDelta = canDoubleJumpTimeout;
+
+        //startYScale = transform.localScale.y;
+    }
+
+    private void Update()
+    {
+        // ground check
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+
+        MyInput();
+        SpeedControl();
+        StateHandler();
+
+        if (readyToDoubleJump && canDoubleJumpDelta >= 0.0f)
+            canDoubleJumpDelta -= Time.deltaTime;
+
+        // handle drag
+        if (grounded && !activeGrapple)
+            rb.drag = groundDrag;
+        else
+            rb.drag = 0;
+
+    }
+
+    private void FixedUpdate()
+    {
+        MovePlayer();
+    }
+
+    private void MyInput()
+    {
+        horizontalInput = _input.move.x;
+        verticalInput = _input.move.y;
+
+        
+
+        // when to jump
+        if (_input.jump && readyToJump && grounded)
+        {
+            readyToJump = false;
+            readyToDoubleJump = true;
+            canDoubleJumpDelta = canDoubleJumpTimeout;
+
+
+            Jump();
+
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+
+        if (_input.jump && readyToDoubleJump && canDoubleJumpDelta <= 0.0f)
+        {
+            readyToDoubleJump = false;
+            canDoubleJumpDelta = canDoubleJumpTimeout;
+
+            Jump();
+
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+
+        if (_input.pause) // NEEDS TO BE CHANGED TO STANDARD KEY, DUNNO HOW TO DO - Ágúst
+        {
+            PauseGame();
+            _input.pause = false;
+        }
+
+        // // start crouch
+        // if (Input.GetKeyDown(crouchKey))
+        // {
+        //     transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+        //     rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        // }
+
+        // // stop crouch
+        // if (Input.GetKeyUp(crouchKey))
+        // {
+        //     transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        // }
+    }
+
+    public void PauseGame() // Needs to be it's own function so that the pause screen can deactivate pause as well
+    {
+        if (paused)
+            {
+                pauseScreen.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+
+                paused = !paused;
+                Time.timeScale = 1;
+                Cursor.visible = false;
+            }
+            else if (!paused)
+            {
+                pauseScreen.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+
+                paused = !paused;
+                Time.timeScale = 0;
+                Cursor.visible = true;
+            }
+    }
+
+    private void StateHandler()
+    {
+        // Mode - Freeze
+        if (freeze)
+        {
+            state = MovementState.freeze;
+            moveSpeed = 0;
+            rb.velocity = Vector3.zero;
+        }
+
+        // Mode - Grappling
+        else if (activeGrapple)
+        {
+            state = MovementState.grappling;
+            moveSpeed = sprintSpeed;
+        }
+
+        // Mode - Swinging
+        else if (swinging)
+        {
+            state = MovementState.swinging;
+            moveSpeed = swingSpeed;
+        }
+
+        // // Mode - Crouching
+        // else if (Input.GetKey(crouchKey))
+        // {
+        //     state = MovementState.crouching;
+        //     moveSpeed = crouchSpeed;
+        // }
+
+        // Mode - Sprinting
+        else if (grounded && _input.sprint)
+        {
+            state = MovementState.sprinting;
+            moveSpeed = sprintSpeed;
+        }
+
+        // Mode - Walking
+        else if (grounded)
+        {
+            state = MovementState.walking;
+            moveSpeed = walkSpeed;
+            readyToDoubleJump = true;
+            canDoubleJumpDelta = canDoubleJumpTimeout;
+            
+        }
+
+        // Mode - Air
+        else
+        {
+            state = MovementState.air;
+            moveSpeed = airSpeed;
+        }
+
+        if (!grounded)
+        {
+            _input.jump = false;
+        }
+    }
+
+    private void MovePlayer()
+    {
+        //Stops player move when grappling
+        if (activeGrapple) return;
+        if (swinging) return;
+
+        // calculate movement direction
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+        // // on slope
+        // if (OnSlope() && !exitingSlope)
+        // {
+        //     rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
+
+        //     if (rb.velocity.y > 0)
+        //         rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+        // }
+
+        // on ground
+        if (grounded)
+        {
+            rb.AddForce(moveDirection * moveSpeed * 10f, ForceMode.Force);
+        }
+
+        // in air
+        else if (!grounded)
+        {
+            rb.AddForce(moveDirection * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+        }
+
+        // turn gravity off while on slope
+        //rb.useGravity = !OnSlope();
+    }
+
+    private void SpeedControl()
+    {
+        //stops player from speed while grappling
+        //if (activeGrapple) return;
+
+        // // limiting speed on slope
+        // if (OnSlope() && !exitingSlope)
+        // {
+        //     if (rb.velocity.magnitude > moveSpeed)
+        //         rb.velocity = rb.velocity.normalized * moveSpeed;
+        // }
+
+        // limiting speed on ground or in air
+        // else
+        // {
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+            // limit velocity if needed
+            if (flatVel.magnitude > moveSpeed)
+            {
+                Vector3 limitedVel = flatVel.normalized * moveSpeed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
+        // }
+    }
+
+    private void Jump()
+    {
+        //exitingSlope = true;
+
+        // reset y velocity
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    }
+    private void ResetJump()
+    {
+        readyToJump = true;
+
+        //exitingSlope = false;
+    }
+
+    // private bool OnSlope()
+    // {
+    //     if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+    //     {
+    //         float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+    //         return angle < maxSlopeAngle && angle != 0;
+    //     }
+
+    //     return false;
+    // }
+
+    // private Vector3 GetSlopeMoveDirection()
+    // {
+    //     return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+    // }
+
+    public void JumpToPosition(Vector3 targetposition, float trajectoryHeight)
+    {
+        activeGrapple = true;
+        velocityToSet = CalculateJumpVelocity(transform.position, targetposition, trajectoryHeight);
+
+        Invoke(nameof(SetVelocity), 0.1f);
+
+        //if grappled too long, in this case 3 seconds, then enable movement again
+        Invoke(nameof(ResetRestrictions), 3f);
+    }
+
+    private Vector3 velocityToSet;
+    private void SetVelocity()
+    {
+        enableMovementOnNextTouch = true;
+        rb.velocity = velocityToSet;
+
+        cam.DoFov(grappleFov);
+        
+    }
+
+    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    {
+        float gravity = Physics.gravity.y;
+        float displacementY = endPoint.y - startPoint.y;
+        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity) 
+            + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
+
+        return velocityXZ + velocityY;
+    }
+
+    public static float Round(float value, int digits)
+    {
+        float mult = Mathf.Pow(10.0f, (float)digits);
+        return Mathf.Round(value * mult) / mult;
+    }
+
+    public void ResetRestrictions()
+    {
+        activeGrapple = false;
+        cam.DoFov(85f);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (enableMovementOnNextTouch)
+        {
+            enableMovementOnNextTouch = false;
+            ResetRestrictions();
+
+            GetComponent<Swinging>().StopGrapple();
+            
+        }
+    }
+
 }

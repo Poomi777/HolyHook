@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class HealthBarScript : MonoBehaviour
 {
-    private Camera cam;
     private float maxHealth;
     private float oldHealth;
     private float currentHealth;
@@ -18,8 +17,6 @@ public class HealthBarScript : MonoBehaviour
 
     void Start()
     {
-        cam = GameObject.Find("Main Camera").GetComponent<Camera>(); // Might need to change if the camera's name changes...
-
         // Used to make sure that the scaling of the Healthbar is always appropriate.
         currentScale = transform.GetChild(0).localScale.x;
         dividerToScale = 1 / currentScale;
