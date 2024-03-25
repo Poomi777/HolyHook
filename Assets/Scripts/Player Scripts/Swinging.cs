@@ -49,6 +49,7 @@ public class Swinging : MonoBehaviour
     public RaycastHit predictionHit;
     public float predictionSphereCastRadius;
     public Transform predictionPoint;
+    public GameObject CrosshairIndicator;
 
     [Header("Rope Animation")]
     public int quality = 200; // Number of segments for the rope
@@ -324,13 +325,10 @@ public class Swinging : MonoBehaviour
         else if (sphereCastHit.point != Vector3.zero)
         {
             realHitPoint = sphereCastHit.point;
-
         }
-
         else
         {
-            realHitPoint = Vector3.zero;
-
+            realHitPoint = Vector3.zero; 
         }
 
         //realHitPoint found
@@ -338,14 +336,15 @@ public class Swinging : MonoBehaviour
         {
             predictionPoint.gameObject.SetActive(true);
             predictionPoint.position = realHitPoint;
-
+            CrosshairIndicator.SetActive(true);
+            
         }
 
         //realHitPoint not found
         else
         {
             predictionPoint.gameObject.SetActive(false);
-    
+            CrosshairIndicator.SetActive(false);
         }
 
         predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
