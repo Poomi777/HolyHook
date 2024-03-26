@@ -238,7 +238,7 @@ public class Swinging : MonoBehaviour
 
 
         playerMovement.swinging = false;
-        playerMovement.readyToDoubleJump = true;
+        //playerMovement.readyToDoubleJump = true;
         lineRenderer.positionCount = 0;
         if (joint != null)
         {
@@ -521,7 +521,7 @@ public class Swinging : MonoBehaviour
     private void DestroySwingJoint()
     {
         playerMovement.swinging = false;
-        playerMovement.readyToDoubleJump = true;
+        //playerMovement.readyToDoubleJump = true;
         lineRenderer.positionCount = 0;
         if (joint != null)
         {

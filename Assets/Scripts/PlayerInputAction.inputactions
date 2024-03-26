@@ -61,9 +61,9 @@
                 },
                 {
                     "name": "Shorten",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "b30004eb-2f6f-4565-a671-e7267526bc6c",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -247,7 +247,7 @@
                 {
                     "name": "",
                     "id": "c8fcd86e-dcfd-4f88-8e93-b638cdbf3320",
-                    "path": "<Gamepad>/leftTrigger",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -280,7 +280,7 @@
                 {
                     "name": "",
                     "id": "18a0f4e8-95c2-4efc-ac1a-e9d107f56d8b",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
@@ -302,7 +302,7 @@
                 {
                     "name": "",
                     "id": "d0113058-5ce7-4b38-9041-e607a738ced3",
-                    "path": "<Keyboard>/q",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",

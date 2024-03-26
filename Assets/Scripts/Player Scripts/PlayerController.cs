@@ -88,16 +88,26 @@ public class PlayerController : MonoBehaviour
     public bool paused;
     public GameObject pauseScreen;
 
+    [Header("Player Audio")]
+    public AudioClip[] foostepSounds;
+    public AudioSource footstepSource;
+    public float footstepTimeout = 3.0f;
+    private float footstepMagnitude = 0.0f;
+    private Vector3 prevPos;
+
+
     private void Start()
     {
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
         _input = GetComponent<StarterAssetsInputs>();
+        
         rb.freezeRotation = true;
 
         readyToJump = true;
         readyToDoubleJump = false;
         canDoubleJumpDelta = canDoubleJumpTimeout;
+        prevPos = transform.position;
 
         //startYScale = transform.localScale.y;
     }
@@ -119,6 +129,8 @@ public class PlayerController : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        CheckFootstepSound();
 
     }
 
@@ -262,6 +274,8 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
+
+
         //Stops player move when grappling
         if (activeGrapple) return;
         if (swinging) return;
@@ -278,6 +292,7 @@ public class PlayerController : MonoBehaviour
         //         rb.AddForce(Vector3.down * 80f, ForceMode.Force);
         // }
 
+        
         // on ground
         if (grounded)
         {
@@ -290,6 +305,12 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(moveDirection * moveSpeed * 10f * airMultiplier, ForceMode.Force);
         }
 
+        Vector3 newPos = transform.position;
+
+
+        float magn = (newPos - prevPos).magnitude;
+        footstepMagnitude += magn;
+        prevPos = transform.position;
         // turn gravity off while on slope
         //rb.useGravity = !OnSlope();
     }
@@ -396,6 +417,19 @@ public class PlayerController : MonoBehaviour
     {
         activeGrapple = false;
         cam.DoFov(85f);
+    }
+
+    private void CheckFootstepSound()
+    {
+        //footstepTimeoutCount += Time.deltaTime;
+
+        if (footstepMagnitude >= footstepTimeout && grounded)
+        {
+            int randval = Random.Range(0, foostepSounds.Length);
+            footstepSource.PlayOneShot(foostepSounds[randval]);
+            footstepMagnitude = 0.0f;
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)
