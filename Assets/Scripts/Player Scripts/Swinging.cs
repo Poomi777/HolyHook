@@ -451,6 +451,11 @@ public class Swinging : MonoBehaviour
             DestroySwingJoint();
 
             grappledObject = hit.transform;
+            if (grappledObject.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                // NEED TO CHECK WHETHER THE ENEMY IS MELEE OR RANGED
+                grappledObject.GetComponent<MeleeEnemyPathfinding>().GetGrappled();
+            }
             objectJoint = player.gameObject.AddComponent<SpringJoint>();
 
             objectJoint.connectedBody = grappledObject.GetComponent<Rigidbody>();
@@ -503,6 +508,21 @@ public class Swinging : MonoBehaviour
             
             //apply throw force to object's rigidbody
             grappledObject.GetComponent<Rigidbody>().AddForce(throwForce, ForceMode.VelocityChange);
+
+            if (grappledObject.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                var script = grappledObject.GetComponent<MeleeEnemyPathfinding>();
+                if (script != null)
+                {            
+                    grappledObject.GetComponent<MeleeEnemyPathfinding>().GetReleased();
+                }
+                
+                var script2 = grappledObject.GetComponent<RangedEnemyPathfinding>();
+                if (script2 != null)
+                {            
+                    grappledObject.GetComponent<RangedEnemyPathfinding>().GetReleased();
+                }
+            }
             
             //cleanup
             Destroy(objectJoint);
