@@ -29,7 +29,6 @@ public class HealthBarScript : MonoBehaviour
             reduceTimer += Time.deltaTime;
             oldHealth = Mathf.Lerp(oldHealth, currentHealth, (reduceTimer - 1));
             transform.GetChild(2).localScale = new Vector3(Mathf.Lerp(oldHealth/maxHealth, currentHealth/maxHealth, (reduceTimer - 1)) / dividerToScale, currentScale, currentScale);
-            
         }
         else if (reduceTimer <= 1)
         {
@@ -44,10 +43,18 @@ public class HealthBarScript : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    public void UpdateHealth(float damage)
+    public void UpdateHealth(float damage)  // NOTE: this function is called by Playerhealthscript, Do not call this directly!
     {
         currentHealth -= damage;
         reduceTimer = 0;
         transform.GetChild(1).localScale = new Vector3((currentHealth/maxHealth) / dividerToScale, currentScale, currentScale);
+    }
+
+    public void Heal(float newHealth) // NOTE: this function is called by Playerhealthscript, Do not call this directly!
+    {
+        currentHealth += newHealth;
+        reduceTimer = 3;
+        transform.GetChild(1).localScale = new Vector3((currentHealth/maxHealth) / dividerToScale, currentScale, currentScale);
+        transform.GetChild(2).localScale = new Vector3((currentHealth/maxHealth) / dividerToScale, currentScale, currentScale);
     }
 }

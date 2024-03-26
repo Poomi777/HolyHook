@@ -13,9 +13,24 @@ public class MeleeEnemyPathfinding : MonoBehaviour
     public float attackCooldown;
     public float durationOfAttack;
     public float damage;
+    public float maxHealth;
+    public float currentHealth;
+
+    [Header("Grapple Settings")]
+    public float standupCooldown;
+    public float minObjectHurtSpeed;
+    public float objectVelocityMultiplier;
+    public float standupYOffset;
 
 
     // No touching
+
+    private bool grappled;
+    private bool hasBeenGrappled;
+    private float standupCooldownTimer;
+    private bool standupProtocolInitiated;
+
+
     private NavMeshAgent agent;
     private GameObject player;
     private float attackTimer;
@@ -24,6 +39,8 @@ public class MeleeEnemyPathfinding : MonoBehaviour
 
     void Start()
     {
+        currentHealth = maxHealth;
+        standupCooldownTimer = -1;
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player");
         
@@ -37,11 +54,39 @@ public class MeleeEnemyPathfinding : MonoBehaviour
 
     void Update()
     {
-        agent.destination = player.transform.position;
+        if (!grappled && !hasBeenGrappled)
+        {
+            agent.destination = player.transform.position;
+        }
         if (Vector3.Distance(transform.position, player.transform.position) <= distanceTilAttack)
         {
             Attack();
         }
+        if (standupCooldownTimer >= 0)
+        {
+            standupCooldownTimer -= Time.deltaTime;
+            if (standupCooldownTimer < 0)
+            {
+                hasBeenGrappled = false;
+                standupProtocolInitiated = false;
+                agent.enabled = true;
+                // May wanna reset rigidbody velocity...
+                transform.position = new Vector3(transform.position.x, standupYOffset + transform.position.y, transform.position.z);
+                Vector3 direction = (player.transform.position - transform.position).normalized;
+                direction.y = 0;
+                transform.rotation = Quaternion.LookRotation(direction);
+            }
+        }
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        // can animate here or add sfx;
+        Destroy(this.gameObject);
     }
 
     void Attack() // IK this should prob not be in the pathfinding script but good code structure laterrrrr - Ágúst
@@ -66,6 +111,43 @@ public class MeleeEnemyPathfinding : MonoBehaviour
                 gameObject.transform.GetChild(0).gameObject.SetActive(true); // Turning on collider;
                 gameObject.GetComponent<Animator>().SetTrigger("Attack");
                 durationOfAttackTimer = durationOfAttack;
+            }
+        }
+    }
+
+    public void GetGrappled()
+    {
+        grappled = true;
+        agent.enabled = false;
+        standupCooldownTimer = -1;
+        standupProtocolInitiated = false;
+    }
+
+    public void GetReleased()
+    {
+        grappled = false;
+        hasBeenGrappled = true;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (hasBeenGrappled || grappled)
+        {
+            if (other.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed || this.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed)
+            {
+                currentHealth -= (other.GetComponent<Rigidbody>().velocity.magnitude + this.GetComponent<Rigidbody>().velocity.magnitude) * objectVelocityMultiplier;
+            }
+            if (hasBeenGrappled && other.gameObject.layer == LayerMask.NameToLayer("Ground") && !standupProtocolInitiated)
+            {
+                standupCooldownTimer = standupCooldown;
+                standupProtocolInitiated = true;
+            }
+        }
+        else
+        {
+            if (other.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed)
+            {
+                currentHealth -= other.GetComponent<Rigidbody>().velocity.magnitude * objectVelocityMultiplier;
             }
         }
     }
