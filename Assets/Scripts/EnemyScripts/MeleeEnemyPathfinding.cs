@@ -86,7 +86,9 @@ public class MeleeEnemyPathfinding : MonoBehaviour
     void Die()
     {
         // can animate here or add sfx;
+        GameManager.instance.enemyKills++;
         Destroy(this.gameObject);
+
     }
 
     void Attack() // IK this should prob not be in the pathfinding script but good code structure laterrrrr - Ágúst

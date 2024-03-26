@@ -78,6 +78,7 @@ public class RangedEnemyPathfinding : MonoBehaviour
     void Die()
     {
         // can animate here or add sfx;
+        GameManager.instance.enemyKills++;
         Destroy(this.gameObject);
     }
 
