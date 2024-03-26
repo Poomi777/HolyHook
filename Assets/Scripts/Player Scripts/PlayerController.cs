@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour
     // Escape stuff, feel free to change
 
     public bool paused;
+    public bool dead = false;
     public GameObject pauseScreen;
 
     [Header("Player Audio")]
@@ -117,7 +118,10 @@ public class PlayerController : MonoBehaviour
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-        MyInput();
+        if (!dead)
+        {
+            MyInput();
+        }
         SpeedControl();
         StateHandler();
 
@@ -191,24 +195,25 @@ public class PlayerController : MonoBehaviour
 
     public void PauseGame() // Needs to be it's own function so that the pause screen can deactivate pause as well
     {
+        
         if (paused)
-            {
-                pauseScreen.SetActive(false);
-                Cursor.lockState = CursorLockMode.Locked;
+        {
+            pauseScreen.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
 
-                paused = !paused;
-                Time.timeScale = 1;
-                Cursor.visible = false;
-            }
-            else if (!paused)
-            {
-                pauseScreen.SetActive(true);
-                Cursor.lockState = CursorLockMode.None;
+            paused = !paused;
+            Time.timeScale = 1;
+            Cursor.visible = false;
+        }
+        else if (!paused)
+        {
+            pauseScreen.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
 
-                paused = !paused;
-                Time.timeScale = 0;
-                Cursor.visible = true;
-            }
+            paused = !paused;
+            Time.timeScale = 0;
+            Cursor.visible = true;
+        }
     }
 
     private void StateHandler()

@@ -61,7 +61,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        if (_input.look.sqrMagnitude >= _threshold && !playerMovement.paused)
+        if (_input.look.sqrMagnitude >= _threshold && !playerMovement.paused && !playerMovement.dead)
         {
 
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
