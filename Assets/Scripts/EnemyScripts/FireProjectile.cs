@@ -12,7 +12,7 @@ public class FireProjectile : MonoBehaviour
     public float fireRate;
     public float projectileSpeed;
 
-    private float timer = 5f;
+    private float timer = 0f;
 
     private void Start()
     {
@@ -36,9 +36,10 @@ public class FireProjectile : MonoBehaviour
     {
         if(timer > 0) { return; }
 
-        GameObject projectileObject = Instantiate(projectileToFire, bulletSpawnPoint.transform.position, bulletSpawnPoint.transform.rotation) as GameObject;
+        Instantiate(projectileToFire, bulletSpawnPoint.transform.position, bulletSpawnPoint.transform.rotation);
         
         timer = fireRate;
     }
+
 
 }
