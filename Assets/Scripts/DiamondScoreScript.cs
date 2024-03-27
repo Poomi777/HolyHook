@@ -18,6 +18,22 @@ public class DiamondScoreScript : MonoBehaviour
 
     void Start()
     {
-        
+        int number_of_diamonds = PlayerPrefs.GetInt(LevelScoreName, 0);
+
+        for (int i = 0; i < number_of_diamonds; i++)
+        {
+            if (i == 1)
+            {
+                FullDiamond1.SetActive(true);
+            }
+            else if (i == 2)
+            {
+                FullDiamond2.SetActive(true);
+            }
+            else if (i == 3)
+            {
+                FullDiamond3.SetActive(true);
+            }
+        }
     }
 }
