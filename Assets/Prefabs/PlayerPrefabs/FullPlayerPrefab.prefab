@@ -739,7 +739,7 @@ GameObject:
   - component: {fileID: 9064420982299876167}
   - component: {fileID: 2329674607664767578}
   - component: {fileID: 5701873859563721808}
-  - component: {fileID: 4928512288813315316}
+  - component: {fileID: 6661708040350997784}
   m_Layer: 0
   m_Name: QUIT
   m_TagString: Untagged
@@ -849,8 +849,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4928512288813315316}
-        m_TargetAssemblyTypeName: PauseScreenScripts, Assembly-CSharp
+      - m_Target: {fileID: 6661708040350997784}
+        m_TargetAssemblyTypeName: DeathScreenScripts, Assembly-CSharp
         m_MethodName: LoadNewScene
         m_Mode: 1
         m_Arguments:
@@ -861,7 +861,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4928512288813315316
+--- !u!114 &6661708040350997784
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -870,7 +870,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3020641411821178017}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d898b47afd18d84dadf0a28169690ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e8f2037cabe7f24c9aa321a94138e5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3550657048906375267
@@ -3037,6 +3037,7 @@ MonoBehaviour:
   crouch: 0
   swing: 0
   shorten: 0
+  pause: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -3673,7 +3674,7 @@ Camera:
     height: 1
   near clip plane: 0.2
   far clip plane: 500
-  field of view: 40
+  field of view: 70
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -4470,7 +4471,7 @@ GameObject:
   - component: {fileID: 5670446188894001266}
   - component: {fileID: 3438285067142527971}
   - component: {fileID: 8844343653200712092}
-  - component: {fileID: 7985814349812298125}
+  - component: {fileID: 795376606603431647}
   m_Layer: 0
   m_Name: RETRY
   m_TagString: Untagged
@@ -4580,8 +4581,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7985814349812298125}
-        m_TargetAssemblyTypeName: PauseScreenScripts, Assembly-CSharp
+      - m_Target: {fileID: 795376606603431647}
+        m_TargetAssemblyTypeName: DeathScreenScripts, Assembly-CSharp
         m_MethodName: ReloadScene
         m_Mode: 1
         m_Arguments:
@@ -4592,7 +4593,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7985814349812298125
+--- !u!114 &795376606603431647
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4601,7 +4602,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8208376209638213353}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d898b47afd18d84dadf0a28169690ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e8f2037cabe7f24c9aa321a94138e5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8450100476052967817

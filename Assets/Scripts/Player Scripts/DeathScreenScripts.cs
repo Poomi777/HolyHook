@@ -3,31 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PauseScreenScripts : MonoBehaviour
+public class DeathScreenScripts : MonoBehaviour
 {
-
-    private GameObject player;
-
-    void Start()
-    {
-        player = GameObject.Find("Player");
-    }
-
     public void LoadNewScene()
     {
-        player.GetComponent<PlayerController>().PauseGame();
+        Time.timeScale = 1;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         SceneManager.LoadScene("Main Menu");
     }
 
-    public void UnpauseGame()
-    {
-        player.GetComponent<PlayerController>().PauseGame();
-    }
-
     public void ReloadScene()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

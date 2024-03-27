@@ -17,7 +17,7 @@ public class DeathCanvasScript : MonoBehaviour
     private TextMeshProUGUI punchlineBackground;
 
 
-    void Start()
+    void Awake()
     {
         setupBackground = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         setup = transform.GetChild(3).GetComponent<TextMeshProUGUI>();
