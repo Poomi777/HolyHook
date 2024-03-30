@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public float barrierForOneStar; // from 0 to 200;
     public float barrierFortwoStars; // from 0 to 200;
     public float barrierForthreeStars; // from 0 to 200;
+    public int DiamondsAchieved;
 
     void Awake()
     {
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour
         passedTime += Time.deltaTime;
     }
 
-    public void SaveScore()
+    public int SaveScore()
     {
         float tempKillScore; // from 0 to 100
         float tempTimeScore; // from 0 to 100
@@ -59,22 +60,40 @@ public class GameManager : MonoBehaviour
             if (tempTotalScore >= barrierFortwoStars)
             {
                 if (tempTotalScore >= barrierForthreeStars)
-                {        
-                    PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 3);
+                {   
+                    if (PlayerPrefs.GetInt(SceneManager.GetActiveScene().name, 0) < 3)
+                    {
+                        PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 3);
+                    }
+                    DiamondsAchieved = 3;
                 }
                 else
                 {
-                    PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 2);
+                    if (PlayerPrefs.GetInt(SceneManager.GetActiveScene().name, 0) < 2)
+                    {
+                        PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 2);
+                    }
+                    DiamondsAchieved = 2;
                 }
             }
             else
             {
-                PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 1);
+                if (PlayerPrefs.GetInt(SceneManager.GetActiveScene().name, 0) < 1)
+                {
+                    PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 1);
+                }                
+                DiamondsAchieved = 1;
             }
         }
         else
         {
-            PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 0);
+            if (PlayerPrefs.GetInt(SceneManager.GetActiveScene().name, 0) <= 0)
+            {
+                PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, 0);
+            }       
+            DiamondsAchieved = 0;
         } 
+
+        return 1;
     }
 }
