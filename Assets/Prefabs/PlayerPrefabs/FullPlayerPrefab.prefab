@@ -781,7 +781,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1780776813338231827}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000066013}
+  m_LocalPosition: {x: 0, y: 0, z: -0.000047143145}
   m_LocalScale: {x: 1.2785114, y: 1.2785114, z: 1.2785114}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -789,7 +789,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -6.000616, y: 104.8}
+  m_AnchoredPosition: {x: -5.000815, y: 104.8}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1378707304213040918
@@ -1169,7 +1169,7 @@ GameObject:
   - component: {fileID: 4250917801361557652}
   - component: {fileID: 1977298734789800720}
   - component: {fileID: 6131339094284159157}
-  - component: {fileID: 6169256434542101146}
+  - component: {fileID: 497978491607021506}
   m_Layer: 0
   m_Name: QUIT
   m_TagString: Untagged
@@ -1279,9 +1279,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6169256434542101146}
-        m_TargetAssemblyTypeName: DeathScreenScripts, Assembly-CSharp
-        m_MethodName: LoadNewScene
+      - m_Target: {fileID: 497978491607021506}
+        m_TargetAssemblyTypeName: WinScreenButtonsScript, Assembly-CSharp
+        m_MethodName: ToMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1291,7 +1291,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6169256434542101146
+--- !u!114 &497978491607021506
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1300,9 +1300,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2555221184353295849}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e8f2037cabe7f24c9aa321a94138e5e, type: 3}
+  m_Script: {fileID: 11500000, guid: 724380c56bbec7a4f942e6093aec7600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadScene: 
 --- !u!1 &2703852640407240591
 GameObject:
   m_ObjectHideFlags: 0
@@ -2987,7 +2988,7 @@ GameObject:
   - component: {fileID: 771864777975963602}
   - component: {fileID: 3220369537104860802}
   - component: {fileID: 1956124793250679707}
-  - component: {fileID: 754082594433459733}
+  - component: {fileID: 8797388336927413317}
   m_Layer: 0
   m_Name: NEXT LEVEL
   m_TagString: Untagged
@@ -3097,9 +3098,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 754082594433459733}
-        m_TargetAssemblyTypeName: MenuScreenLoader, Assembly-CSharp
-        m_MethodName: LoadLevel
+      - m_Target: {fileID: 8797388336927413317}
+        m_TargetAssemblyTypeName: WinScreenButtonsScript, Assembly-CSharp
+        m_MethodName: LoadNextLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3109,7 +3110,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &754082594433459733
+--- !u!114 &8797388336927413317
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3118,14 +3119,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5025345250307449224}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 780fdf08960d97745bffa915bad3d256, type: 3}
+  m_Script: {fileID: 11500000, guid: 724380c56bbec7a4f942e6093aec7600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LevelSelectButton: 0
   loadScene: MainMenu
-  MainMenu: {fileID: 0}
-  LevelSelect: {fileID: 0}
-  LevelSelectScrollbar: {fileID: 0}
 --- !u!1 &5102305554045198506
 GameObject:
   m_ObjectHideFlags: 0
@@ -3866,15 +3863,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e62f979ee27b545b4abe79e10f39a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 10
-  sprintSpeed: 15
+  walkSpeed: 7
+  sprintSpeed: 12
   swingSpeed: 17
-  airSpeed: 15
+  airSpeed: 7
   groundDrag: 6
   jumpForce: 7
   jumpCooldown: 0.25
   airMultiplier: 0.3
-  canDoubleJumpTimeout: 0.3
+  canDoubleJumpTimeout: 0.1
   readyToDoubleJump: 0
   jumpKey: 32
   sprintKey: 304
@@ -4003,7 +4000,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensX: 10
   sensY: 10
-  controllerSensitivity: 0
+  controllerSensitivity: 5
   multiplier: 0.1
   orientation: {fileID: 1009378943926668198}
   camHolder: {fileID: 9084942698127837269}
@@ -4615,7 +4612,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6805983813759474061}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.00005281}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1.6820874, y: 1.6820874, z: 1.6820874}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4623,7 +4620,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -6, y: 40.548103}
+  m_AnchoredPosition: {x: -5, y: 40.548103}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6756270955883433959
@@ -5598,7 +5595,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7619029328642502745}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.9988863}
+  m_LocalPosition: {x: 0, y: 0, z: 3.9991982}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5606,7 +5603,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 26.9002, y: 0}
+  m_AnchoredPosition: {x: 40.201183, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8998040094189667376
@@ -6022,7 +6019,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -33.5, y: -9.7}
+  m_AnchoredPosition: {x: -32.9, y: -9.4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7127995684604891247
@@ -6738,7 +6735,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8963225090165461592}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6746,7 +6743,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 28.2, y: -2.6}
+  m_AnchoredPosition: {x: 41.7, y: -2.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7663093211990320429

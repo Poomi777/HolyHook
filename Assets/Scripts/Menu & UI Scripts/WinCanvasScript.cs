@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class WinScreenScript : MonoBehaviour
+public class WinCanvasScript : MonoBehaviour
 {
     public GameObject EmptyDiamond1;
     public GameObject EmptyDiamond2;
@@ -19,13 +19,15 @@ public class WinScreenScript : MonoBehaviour
 
     void OnEnable()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        float TimePassed = GameManager.instance.passedTime;
         int guarantee = GameManager.instance.SaveScore();
-        // im doing this purely so Unity waits a moment before it starts processing info.
+        // im doing this purely so Unity waits a moment before it starts fetching info.
 
         if (guarantee == 1)
         {
             Time.timeScale = 0;
-            float TimePassed = GameManager.instance.passedTime;
             int TotalKills = GameManager.instance.enemyKills;
             int DiamondsScored = GameManager.instance.DiamondsAchieved;
 
