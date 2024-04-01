@@ -3890,6 +3890,7 @@ MonoBehaviour:
   paused: 0
   dead: 0
   pauseScreen: {fileID: 5915111346762947424}
+  winCanvas: {fileID: 6555027131245512045}
   foostepSounds: []
   footstepSource: {fileID: 0}
   footstepTimeout: 3

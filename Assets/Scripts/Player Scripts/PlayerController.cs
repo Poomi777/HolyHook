@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
     public bool paused;
     public bool dead = false;
     public GameObject pauseScreen;
+    public GameObject winCanvas;
 
     [Header("Player Audio")]
     public AudioClip[] foostepSounds;
@@ -447,6 +448,11 @@ public class PlayerController : MonoBehaviour
             GetComponent<Swinging>().StopGrapple();
             
         }
+    }
+
+    public void WinTrigger()
+    {
+        winCanvas.SetActive(true);
     }
 
 }
