@@ -82,6 +82,10 @@ public class Swinging : MonoBehaviour
 
     public bool isObjectGrappleActive = false;
 
+    public float swingAngleToJump = 90.0f;
+    
+    Vector3 posAtStartSwing;
+
 
     void Awake()
     {
@@ -154,6 +158,8 @@ public class Swinging : MonoBehaviour
             {
                 StartSwing();
                 isSwinging = true;
+                playerMovement.readyToDoubleJump = false;
+                playerMovement.hasJumpedInSwing = false;
             }
         }
         
@@ -219,7 +225,7 @@ public class Swinging : MonoBehaviour
 
         lineRenderer.positionCount = 2;
         currentGrapplePosition = gunTip.position;
-
+        posAtStartSwing = gameObject.transform.position;
 
         PlayRandomSound();
     }
@@ -297,6 +303,21 @@ public class Swinging : MonoBehaviour
             joint.maxDistance = extendedDistanceFromPoint * 0.8f;
             joint.minDistance = extendedDistanceFromPoint * 0.15f;
         }
+
+        Vector3 swingToStart = (posAtStartSwing - swingPoint ).normalized;
+        Vector3 swingToCurrent = (gameObject.transform.position - swingPoint).normalized;
+
+
+        float swingAngleDelta = Vector3.Angle(swingToStart, swingToCurrent);
+        
+        if (swingAngleDelta >= swingAngleToJump && !playerMovement.hasJumpedInSwing)
+        {
+            playerMovement.readyToJumpAfterSwing = true;
+        }
+
+        Debug.DrawLine(swingPoint, posAtStartSwing);
+        Debug.DrawLine(swingPoint, gameObject.transform.position);
+
     }
 
     private void CheckForSwingPoints()

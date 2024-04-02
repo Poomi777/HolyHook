@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Jumping")]
     public float jumpForce;
+    public float doubleJumpForce;
+    public float jumpAfterSwingForce;
     public float jumpCooldown;
     public float airMultiplier;
     public float canDoubleJumpTimeout = 0.30f;
@@ -26,7 +28,12 @@ public class PlayerController : MonoBehaviour
     bool readyToJump;
     public bool readyToDoubleJump;
 
+    public bool readyToJumpAfterSwing;
+
     float canDoubleJumpDelta;
+
+    bool hasLanded;
+    public bool hasJumpedInSwing = false;
 
     // [Header("Crouching")]
     // public float crouchSpeed;
@@ -107,6 +114,7 @@ public class PlayerController : MonoBehaviour
 
         readyToJump = true;
         readyToDoubleJump = false;
+        hasLanded = false;
         canDoubleJumpDelta = canDoubleJumpTimeout;
         prevPos = transform.position;
 
@@ -116,7 +124,13 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         // ground check
+
+        bool prevGrounded = grounded;
+
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+
+        if (prevGrounded != grounded && grounded)
+            hasLanded = true;
 
         if (!dead)
         {
@@ -154,23 +168,27 @@ public class PlayerController : MonoBehaviour
         if (_input.jump && readyToJump && grounded)
         {
             readyToJump = false;
-            readyToDoubleJump = true;
             canDoubleJumpDelta = canDoubleJumpTimeout;
-
-
             Jump();
+            readyToDoubleJump = true;
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
         if (_input.jump && readyToDoubleJump && canDoubleJumpDelta <= 0.0f)
         {
-            readyToDoubleJump = false;
             canDoubleJumpDelta = canDoubleJumpTimeout;
-
             Jump();
+            readyToDoubleJump = false;
 
-            Invoke(nameof(ResetJump), jumpCooldown);
+            //Invoke(nameof(ResetJump), jumpCooldown);
+        }
+
+        if (_input.jump && readyToJumpAfterSwing)
+        {
+            Jump();
+            readyToJumpAfterSwing = false;
+            hasJumpedInSwing = true;
         }
 
         if (_input.pause) // NEEDS TO BE CHANGED TO STANDARD KEY, DUNNO HOW TO DO - Ágúst
@@ -178,6 +196,8 @@ public class PlayerController : MonoBehaviour
             PauseGame();
             _input.pause = false;
         }
+
+        _input.jump = false;
 
         // // start crouch
         // if (Input.GetKeyDown(crouchKey))
@@ -259,9 +279,17 @@ public class PlayerController : MonoBehaviour
         {
             state = MovementState.walking;
             moveSpeed = walkSpeed;
-            readyToDoubleJump = true;
+            
             canDoubleJumpDelta = canDoubleJumpTimeout;
             
+        }
+
+        if (hasLanded)
+        {
+            readyToJump = true;
+            readyToDoubleJump = false;
+            hasLanded = false;
+            readyToJumpAfterSwing = false; 
         }
 
         // Mode - Air
@@ -353,7 +381,13 @@ public class PlayerController : MonoBehaviour
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
+        if (readyToDoubleJump)
+            rb.AddForce(transform.up * doubleJumpForce, ForceMode.Impulse);
+        else if (readyToJumpAfterSwing)
+            rb.AddForce(transform.up * jumpAfterSwingForce, ForceMode.Impulse);
+        else
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+
     }
     private void ResetJump()
     {
