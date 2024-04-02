@@ -9,7 +9,7 @@ public class DeathCollider : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            other.GetComponent<PlayerHealtScript>().TakeDamage(99999);
         }
         else if (other.gameObject.layer == LayerMask.NameToLayer ("Object") || other.gameObject.layer == LayerMask.NameToLayer ( "Enemy" ))
         {

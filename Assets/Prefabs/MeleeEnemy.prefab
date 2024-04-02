@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 1837975981071890627}
   - component: {fileID: 4528603787010368623}
   - component: {fileID: 322899495526944476}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MeleeEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.93, z: 0}
-  m_LocalScale: {x: 0.45789, y: 0.45789, z: 0.45789}
+  m_LocalScale: {x: 1.7125087, y: 1.7125087, z: 1.7125087}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4474705299668569714}
@@ -191,7 +191,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 30
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -219,6 +219,12 @@ MonoBehaviour:
   attackCooldown: 1.5
   durationOfAttack: 0.5
   damage: 10
+  maxHealth: 50
+  currentHealth: 0
+  standupCooldown: 3
+  minObjectHurtSpeed: 3
+  objectVelocityMultiplier: 5
+  standupYOffset: 1
 --- !u!54 &4528603787010368623
 Rigidbody:
   m_ObjectHideFlags: 0
