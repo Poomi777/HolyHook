@@ -315,8 +315,7 @@ public class Swinging : MonoBehaviour
             playerMovement.readyToJumpAfterSwing = true;
         }
 
-        Debug.DrawLine(swingPoint, posAtStartSwing);
-        Debug.DrawLine(swingPoint, gameObject.transform.position);
+        
 
     }
 
