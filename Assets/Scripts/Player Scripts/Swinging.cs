@@ -49,6 +49,7 @@ public class Swinging : MonoBehaviour
     public RaycastHit predictionHit;
     public float predictionSphereCastRadius;
     public Transform predictionPoint;
+    public GameObject CrosshairIndicator;
 
     [Header("Rope Animation")]
     public int quality = 200; // Number of segments for the rope
@@ -80,6 +81,10 @@ public class Swinging : MonoBehaviour
     public float maxObjectGrappleDistance = 25f; //maximum distance to grapple an object
 
     public bool isObjectGrappleActive = false;
+
+    public float swingAngleToJump = 90.0f;
+    
+    Vector3 posAtStartSwing;
 
 
     void Awake()
@@ -153,6 +158,8 @@ public class Swinging : MonoBehaviour
             {
                 StartSwing();
                 isSwinging = true;
+                playerMovement.readyToDoubleJump = false;
+                playerMovement.hasJumpedInSwing = false;
             }
         }
         
@@ -218,7 +225,7 @@ public class Swinging : MonoBehaviour
 
         lineRenderer.positionCount = 2;
         currentGrapplePosition = gunTip.position;
-
+        posAtStartSwing = gameObject.transform.position;
 
         PlayRandomSound();
     }
@@ -238,7 +245,7 @@ public class Swinging : MonoBehaviour
 
 
         playerMovement.swinging = false;
-        playerMovement.readyToDoubleJump = true;
+        //playerMovement.readyToDoubleJump = true;
         lineRenderer.positionCount = 0;
         if (joint != null)
         {
@@ -296,6 +303,21 @@ public class Swinging : MonoBehaviour
             joint.maxDistance = extendedDistanceFromPoint * 0.8f;
             joint.minDistance = extendedDistanceFromPoint * 0.15f;
         }
+
+        Vector3 swingToStart = (posAtStartSwing - swingPoint ).normalized;
+        Vector3 swingToCurrent = (gameObject.transform.position - swingPoint).normalized;
+
+
+        float swingAngleDelta = Vector3.Angle(swingToStart, swingToCurrent);
+        
+        if (swingAngleDelta >= swingAngleToJump && !playerMovement.hasJumpedInSwing)
+        {
+            playerMovement.readyToJumpAfterSwing = true;
+        }
+
+        Debug.DrawLine(swingPoint, posAtStartSwing);
+        Debug.DrawLine(swingPoint, gameObject.transform.position);
+
     }
 
     private void CheckForSwingPoints()
@@ -324,13 +346,10 @@ public class Swinging : MonoBehaviour
         else if (sphereCastHit.point != Vector3.zero)
         {
             realHitPoint = sphereCastHit.point;
-
         }
-
         else
         {
-            realHitPoint = Vector3.zero;
-
+            realHitPoint = Vector3.zero; 
         }
 
         //realHitPoint found
@@ -338,14 +357,15 @@ public class Swinging : MonoBehaviour
         {
             predictionPoint.gameObject.SetActive(true);
             predictionPoint.position = realHitPoint;
-
+            CrosshairIndicator.SetActive(true);
+            
         }
 
         //realHitPoint not found
         else
         {
             predictionPoint.gameObject.SetActive(false);
-    
+            CrosshairIndicator.SetActive(false);
         }
 
         predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
@@ -452,6 +472,11 @@ public class Swinging : MonoBehaviour
             DestroySwingJoint();
 
             grappledObject = hit.transform;
+            if (grappledObject.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                // NEED TO CHECK WHETHER THE ENEMY IS MELEE OR RANGED
+                grappledObject.GetComponent<MeleeEnemyPathfinding>().GetGrappled();
+            }
             objectJoint = player.gameObject.AddComponent<SpringJoint>();
 
             objectJoint.connectedBody = grappledObject.GetComponent<Rigidbody>();
@@ -504,6 +529,21 @@ public class Swinging : MonoBehaviour
             
             //apply throw force to object's rigidbody
             grappledObject.GetComponent<Rigidbody>().AddForce(throwForce, ForceMode.VelocityChange);
+
+            if (grappledObject.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                var script = grappledObject.GetComponent<MeleeEnemyPathfinding>();
+                if (script != null)
+                {            
+                    grappledObject.GetComponent<MeleeEnemyPathfinding>().GetReleased();
+                }
+                
+                var script2 = grappledObject.GetComponent<RangedEnemyPathfinding>();
+                if (script2 != null)
+                {            
+                    grappledObject.GetComponent<RangedEnemyPathfinding>().GetReleased();
+                }
+            }
             
             //cleanup
             Destroy(objectJoint);
@@ -521,7 +561,7 @@ public class Swinging : MonoBehaviour
     private void DestroySwingJoint()
     {
         playerMovement.swinging = false;
-        playerMovement.readyToDoubleJump = true;
+        //playerMovement.readyToDoubleJump = true;
         lineRenderer.positionCount = 0;
         if (joint != null)
         {
