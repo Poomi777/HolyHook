@@ -19,10 +19,10 @@ public class DeathCanvasScript : MonoBehaviour
 
     void Awake()
     {
-        setupBackground = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
-        setup = transform.GetChild(3).GetComponent<TextMeshProUGUI>();
-        punchlineBackground = transform.GetChild(4).GetComponent<TextMeshProUGUI>();
-        punchline = transform.GetChild(5).GetComponent<TextMeshProUGUI>();
+        setupBackground = transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        setup = transform.GetChild(4).GetComponent<TextMeshProUGUI>();
+        punchlineBackground = transform.GetChild(5).GetComponent<TextMeshProUGUI>();
+        punchline = transform.GetChild(6).GetComponent<TextMeshProUGUI>();
     }
 
     void OnEnable()

@@ -28,7 +28,7 @@ public class HealthBarScript : MonoBehaviour
         {
             reduceTimer += Time.deltaTime;
             oldHealth = Mathf.Lerp(oldHealth, currentHealth, (reduceTimer - 1));
-            transform.GetChild(2).localScale = new Vector3(Mathf.Lerp(oldHealth/maxHealth, currentHealth/maxHealth, (reduceTimer - 1)) / dividerToScale, currentScale, currentScale);
+            transform.GetChild(0).localScale = new Vector3(Mathf.Lerp(oldHealth/maxHealth, currentHealth/maxHealth, (reduceTimer - 1)) / dividerToScale, currentScale, currentScale);
         }
         else if (reduceTimer <= 1)
         {
@@ -55,6 +55,6 @@ public class HealthBarScript : MonoBehaviour
         currentHealth += newHealth;
         reduceTimer = 3;
         transform.GetChild(1).localScale = new Vector3((currentHealth/maxHealth) / dividerToScale, currentScale, currentScale);
-        transform.GetChild(2).localScale = new Vector3((currentHealth/maxHealth) / dividerToScale, currentScale, currentScale);
+        transform.GetChild(0).localScale = new Vector3((currentHealth/maxHealth) / dividerToScale, currentScale, currentScale);
     }
 }
