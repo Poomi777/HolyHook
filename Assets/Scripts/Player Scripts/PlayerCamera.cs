@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
+//using DG.Tweening;
 using UnityEngine.InputSystem;
 using StarterAssets;
 
@@ -105,8 +105,8 @@ public class PlayerCamera : MonoBehaviour
         cam.fieldOfView = lerpedFov;
     }
 
-    public void DoFov(float endValue)
-    {
-        GetComponent<Camera>().DOFieldOfView(endValue, 0.25f);
-    }
+    // public void DoFov(float endValue)
+    // {
+    //     GetComponent<Camera>().DOFieldOfView(endValue, 0.25f);
+    // }
 }
