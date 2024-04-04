@@ -205,6 +205,8 @@ public class Swinging : MonoBehaviour
         playerMovement.ResetRestrictions();
         
         playerMovement.swinging = true;
+        Vector3 swingStartVelocity = playerMovement.lastVelocity;
+        rb.velocity = swingStartVelocity; 
 
         swingPoint = predictionHit.point;
         joint = player.gameObject.AddComponent<SpringJoint>();
@@ -296,14 +298,16 @@ public class Swinging : MonoBehaviour
         }
 
         //extend cable
-        if (isSPressed)
-        {
-            float extendedDistanceFromPoint = Vector3.Distance(transform.position, swingPoint) + extendCableSpeed;
+        // if (isSPressed)
+        // {
+        //     float extendedDistanceFromPoint = Vector3.Distance(transform.position, swingPoint) + extendCableSpeed;
 
-            joint.maxDistance = extendedDistanceFromPoint * 0.8f;
-            joint.minDistance = extendedDistanceFromPoint * 0.15f;
-        }
-
+        //     joint.maxDistance = extendedDistanceFromPoint * 0.8f;
+        //     joint.minDistance = extendedDistanceFromPoint * 0.15f;
+        // }
+        //////////////////////////////////////////////////////////////////
+        ///
+        
         Vector3 swingToStart = (posAtStartSwing - swingPoint ).normalized;
         Vector3 swingToCurrent = (gameObject.transform.position - swingPoint).normalized;
 

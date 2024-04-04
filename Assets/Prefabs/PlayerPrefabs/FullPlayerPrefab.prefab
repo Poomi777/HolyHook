@@ -3914,7 +3914,10 @@ MonoBehaviour:
   sprintSpeed: 12
   swingSpeed: 17
   airSpeed: 7
+  maxAirSpeed: 37
+  maxGroundSpeed: 7
   groundDrag: 6
+  lastVelocity: {x: 0, y: 0, z: 0}
   jumpForce: 7
   doubleJumpForce: 14
   jumpAfterSwingForce: 10
