@@ -164,7 +164,7 @@ public class Swinging : MonoBehaviour
         }
         
 
-        if (_input.swing)
+        if (_input.swing && !isObjectGrappleActive)
         {
             StartGrappleObject();
             isObjectGrappleActive = true;
