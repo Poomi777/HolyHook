@@ -430,7 +430,7 @@ public class PlayerController : MonoBehaviour
         enableMovementOnNextTouch = true;
         rb.velocity = velocityToSet;
 
-        cam.DoFov(grappleFov);
+        // cam.DoFov(grappleFov);
         
     }
 
@@ -456,7 +456,7 @@ public class PlayerController : MonoBehaviour
     public void ResetRestrictions()
     {
         activeGrapple = false;
-        cam.DoFov(85f);
+        // cam.DoFov(85f);
     }
 
     private void CheckFootstepSound()
