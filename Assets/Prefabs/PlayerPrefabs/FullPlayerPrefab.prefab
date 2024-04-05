@@ -3053,7 +3053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 724380c56bbec7a4f942e6093aec7600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadScene: MainMenu
+  loadScene: Main Menu
 --- !u!1 &5102305554045198506
 GameObject:
   m_ObjectHideFlags: 0
