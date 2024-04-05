@@ -336,12 +336,24 @@ public class PlayerController : MonoBehaviour
         else if (!grounded && !swinging)
         {
             //allow directional change without affecting speed.
-            Vector3 forceDirection = (orientation.forward * verticalInput + orientation.right * horizontalInput).normalized;
-            Vector3 horizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            if (forceDirection != Vector3.zero)
-            {
-                rb.velocity = new Vector3(forceDirection.x * horizontalVelocity.magnitude, rb.velocity.y, forceDirection.z * horizontalVelocity.magnitude);
-            }
+            AdjustAirDirection(moveDirection);
+        }
+    }
+
+    private void AdjustAirDirection(Vector3 inputDirection)
+    {
+        
+        if (inputDirection.sqrMagnitude > 0.01f)
+        {
+            inputDirection = inputDirection.normalized;
+            
+            float currentSpeed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
+            
+            Vector3 newVelocity = inputDirection * currentSpeed;
+            
+            newVelocity.y = rb.velocity.y;
+            
+            rb.velocity = newVelocity;
         }
     }
 
