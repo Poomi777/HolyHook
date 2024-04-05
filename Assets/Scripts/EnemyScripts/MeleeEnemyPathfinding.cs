@@ -135,7 +135,7 @@ public class MeleeEnemyPathfinding : MonoBehaviour
     {
         if (hasBeenGrappled || grappled)
         {
-            if (other.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed || this.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed)
+            if ((other.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed || this.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed)  && other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
             {
                 currentHealth -= (other.GetComponent<Rigidbody>().velocity.magnitude + this.GetComponent<Rigidbody>().velocity.magnitude) * objectVelocityMultiplier;
             }
@@ -147,7 +147,7 @@ public class MeleeEnemyPathfinding : MonoBehaviour
         }
         else
         {
-            if (other.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed)
+            if (other.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed && other.gameObject.layer != LayerMask.NameToLayer("EnemyProjectile") && other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
             {
                 currentHealth -= other.GetComponent<Rigidbody>().velocity.magnitude * objectVelocityMultiplier;
             }

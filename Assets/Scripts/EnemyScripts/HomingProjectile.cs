@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class HomingProjectile : MonoBehaviour
 {
-
-
-
     private GameObject Player;
     private Transform target;
     public float homingSpeed = 5f;
@@ -41,9 +38,6 @@ public class HomingProjectile : MonoBehaviour
         {
             Destroy(this.gameObject); // Destroy the specific instnace, not all instances
         }
-
-
-
     }
     void OnTriggerEnter(Collider other)
     {
@@ -52,7 +46,5 @@ public class HomingProjectile : MonoBehaviour
             other.GetComponent<PlayerHealtScript>().TakeDamage(damage);
         }
         Destroy(this.gameObject); // Destroy the specific instnace, not all instances
-
     }
-
 }

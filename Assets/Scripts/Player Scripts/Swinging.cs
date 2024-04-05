@@ -474,8 +474,17 @@ public class Swinging : MonoBehaviour
             grappledObject = hit.transform;
             if (grappledObject.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                // NEED TO CHECK WHETHER THE ENEMY IS MELEE OR RANGED
-                grappledObject.GetComponent<MeleeEnemyPathfinding>().GetGrappled();
+                MeleeEnemyPathfinding melee = grappledObject.GetComponent<MeleeEnemyPathfinding>();
+                RangedEnemyPathfinding ranged = grappledObject.GetComponent<RangedEnemyPathfinding>();
+
+                if (ranged != null)
+                {
+                    ranged.GetGrappled();
+                }
+                else if (melee != null)
+                {
+                    melee.GetGrappled();
+                }
             }
             objectJoint = player.gameObject.AddComponent<SpringJoint>();
 
@@ -511,13 +520,15 @@ public class Swinging : MonoBehaviour
     void DragGrappleObject()
     {
         //calculate target position in front of the camera to drag the object towards
-        Vector3 targetPosition = cam.position + cam.forward * Vector3.Distance(cam.position, grappledObject.position);
-
-
-
-        Vector3 forceDirection = (targetPosition - grappledObject.position).normalized;
-        float forceMagnitude = 10f; // Adjust this value as needed
-        grappledObject.GetComponent<Rigidbody>().AddForce(forceDirection * forceMagnitude);
+        if (grappledObject != null)
+        {
+            Vector3 targetPosition = cam.position + cam.forward * Vector3.Distance(cam.position, grappledObject.position);
+            
+            
+            Vector3 forceDirection = (targetPosition - grappledObject.position).normalized;
+            float forceMagnitude = 10f; // Adjust this value as needed
+            grappledObject.GetComponent<Rigidbody>().AddForce(forceDirection * forceMagnitude);
+        }
     }
 
     void ReleaseGrappleObject()
@@ -525,23 +536,26 @@ public class Swinging : MonoBehaviour
         if (objectJoint != null)
         {
             //throw force based on mouse movement
-            Vector3 throwForce = Vector3.zero; //placeholder for throw force calculation
-            
-            //apply throw force to object's rigidbody
-            grappledObject.GetComponent<Rigidbody>().AddForce(throwForce, ForceMode.VelocityChange);
-
-            if (grappledObject.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            if (grappledObject != null)
             {
-                var script = grappledObject.GetComponent<MeleeEnemyPathfinding>();
-                if (script != null)
-                {            
-                    grappledObject.GetComponent<MeleeEnemyPathfinding>().GetReleased();
-                }
+                Vector3 throwForce = Vector3.zero; //placeholder for throw force calculation
                 
-                var script2 = grappledObject.GetComponent<RangedEnemyPathfinding>();
-                if (script2 != null)
-                {            
-                    grappledObject.GetComponent<RangedEnemyPathfinding>().GetReleased();
+                //apply throw force to object's rigidbody
+                grappledObject.GetComponent<Rigidbody>().AddForce(throwForce, ForceMode.VelocityChange);
+
+                if (grappledObject.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                {
+                    var script = grappledObject.GetComponent<MeleeEnemyPathfinding>();
+                    if (script != null)
+                    {            
+                        grappledObject.GetComponent<MeleeEnemyPathfinding>().GetReleased();
+                    }
+                    
+                    var script2 = grappledObject.GetComponent<RangedEnemyPathfinding>();
+                    if (script2 != null)
+                    {            
+                        grappledObject.GetComponent<RangedEnemyPathfinding>().GetReleased();
+                    }
                 }
             }
             
