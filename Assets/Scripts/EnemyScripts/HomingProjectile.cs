@@ -45,6 +45,9 @@ public class HomingProjectile : MonoBehaviour
         {
             other.GetComponent<PlayerHealtScript>().TakeDamage(damage);
         }
-        Destroy(this.gameObject); // Destroy the specific instnace, not all instances
+        if (other.gameObject.layer != LayerMask.NameToLayer("EnemyProjectile"))
+        {
+            Destroy(this.gameObject); // Destroy the specific instnace, not all instances
+        }
     }
 }
