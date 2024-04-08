@@ -6,7 +6,6 @@ public class DiamondScoreScript : MonoBehaviour
 {
 
     public string LevelScoreName;
-
     public GameObject EmptyDiamond1;
     public GameObject EmptyDiamond2;
     public GameObject EmptyDiamond3;

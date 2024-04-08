@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
 
     [Header("Final Score Settings")]
+    
+    public string nextLevel;
     public float minTime;
     public float maxTime;
     public float minKills;
@@ -94,6 +96,8 @@ public class GameManager : MonoBehaviour
             DiamondsAchieved = 0;
         } 
 
+        PlayerPrefs.SetInt(nextLevel, 1);
+        PlayerPrefs.Save();
         return 1;
     }
 }
