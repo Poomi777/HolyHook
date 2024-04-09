@@ -36,7 +36,10 @@ public class MenuScreenLoader : MonoBehaviour
 
     public void LoadLevel()
     {
-        SceneManager.LoadScene(loadScene);
+        if (PlayerPrefs.GetInt(loadScene, 0) == 1 || loadScene == "Level1"  || loadScene == "Tutorial"  || loadScene == "PlaytestLevel")
+        {
+            SceneManager.LoadScene(loadScene);
+        }
     }
 
     public void QuitGame()

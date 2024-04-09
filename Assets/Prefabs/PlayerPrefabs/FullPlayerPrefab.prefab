@@ -1234,7 +1234,7 @@ GameObject:
   - component: {fileID: 6131339094284159157}
   - component: {fileID: 497978491607021506}
   m_Layer: 0
-  m_Name: QUIT
+  m_Name: NEXTLEVEL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1344,7 +1344,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 497978491607021506}
         m_TargetAssemblyTypeName: WinScreenButtonsScript, Assembly-CSharp
-        m_MethodName: ToMainMenu
+        m_MethodName: LoadNextLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1366,7 +1366,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 724380c56bbec7a4f942e6093aec7600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadScene: 
 --- !u!1 &2703852640407240591
 GameObject:
   m_ObjectHideFlags: 0
@@ -3049,7 +3048,7 @@ GameObject:
   - component: {fileID: 1956124793250679707}
   - component: {fileID: 8797388336927413317}
   m_Layer: 0
-  m_Name: NEXT LEVEL
+  m_Name: QUIT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3159,7 +3158,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8797388336927413317}
         m_TargetAssemblyTypeName: WinScreenButtonsScript, Assembly-CSharp
-        m_MethodName: LoadNextLevel
+        m_MethodName: ToMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3181,7 +3180,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 724380c56bbec7a4f942e6093aec7600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadScene: MainMenu
 --- !u!1 &5102305554045198506
 GameObject:
   m_ObjectHideFlags: 0
@@ -3914,7 +3912,10 @@ MonoBehaviour:
   sprintSpeed: 12
   swingSpeed: 17
   airSpeed: 7
+  maxAirSpeed: 37
+  maxGroundSpeed: 7
   groundDrag: 6
+  lastVelocity: {x: 0, y: 0, z: 0}
   jumpForce: 7
   doubleJumpForce: 14
   jumpAfterSwingForce: 10
