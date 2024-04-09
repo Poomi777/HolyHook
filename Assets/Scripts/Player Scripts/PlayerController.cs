@@ -235,7 +235,7 @@ public class PlayerController : MonoBehaviour
             paused = !paused;
             Time.timeScale = 1;
             Cursor.visible = false;
-            audioMixer.SetFloat("CutoffParam", 2371.5f);
+            audioMixer.SetFloat("CutoffParam", 22000.5f);
         }
         else if (!paused)
         {
