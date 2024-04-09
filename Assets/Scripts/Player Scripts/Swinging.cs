@@ -141,7 +141,7 @@ public class Swinging : MonoBehaviour
     private void MyInput()
     {
         //Starting swings or grapples depends on whether or not shift is pressed
-
+        /*
         if (_input.sprint && !isSwinging)
         {
             if (_input.swing && grapplingCdTimer <= 0f)
@@ -151,16 +151,13 @@ public class Swinging : MonoBehaviour
                 grapplingCdTimer = grapplingCd;
             }
         }
-
-        else
+        */
+        if (_input.swing && !isSwinging)
         {
-            if (_input.swing && !isSwinging)
-            {
-                StartSwing();
-                isSwinging = true;
-                playerMovement.readyToDoubleJump = false;
-                playerMovement.hasJumpedInSwing = false;
-            }
+            StartSwing();
+            isSwinging = true;
+            playerMovement.readyToDoubleJump = false;
+            playerMovement.hasJumpedInSwing = false;
         }
         
 
@@ -201,7 +198,7 @@ public class Swinging : MonoBehaviour
         spring.SetVelocity(animationVelocity); // Initial velocity of the spring animation.
         //
 
-        CancelActiveGrapple();
+        //CancelActiveGrapple();
         playerMovement.ResetRestrictions();
         
         playerMovement.swinging = true;
@@ -296,6 +293,7 @@ public class Swinging : MonoBehaviour
         }
 
         //extend cable
+        /*
         if (isSPressed)
         {
             float extendedDistanceFromPoint = Vector3.Distance(transform.position, swingPoint) + extendCableSpeed;
@@ -303,7 +301,7 @@ public class Swinging : MonoBehaviour
             joint.maxDistance = extendedDistanceFromPoint * 0.8f;
             joint.minDistance = extendedDistanceFromPoint * 0.15f;
         }
-
+        */
         Vector3 swingToStart = (posAtStartSwing - swingPoint ).normalized;
         Vector3 swingToCurrent = (gameObject.transform.position - swingPoint).normalized;
 
@@ -373,7 +371,7 @@ public class Swinging : MonoBehaviour
     }
 
     #endregion
-
+    /*
     #region grappling
 
     private void StartGrapple()
@@ -445,11 +443,13 @@ public class Swinging : MonoBehaviour
 
     #endregion
 
+    */
     #region  CancelAbilities
-    public void CancelActiveGrapple()
+    
+    /*public void CancelActiveGrapple()
     {
         StopGrapple();
-    }
+    }*/
 
     private void CancelActiveSwing()
     {
