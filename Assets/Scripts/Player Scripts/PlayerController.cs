@@ -493,7 +493,7 @@ public class PlayerController : MonoBehaviour
             enableMovementOnNextTouch = false;
             ResetRestrictions();
 
-            GetComponent<Swinging>().StopGrapple();
+            //GetComponent<Swinging>().StopGrapple();
             
         }
     }
