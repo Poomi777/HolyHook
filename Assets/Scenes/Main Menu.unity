@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.094288744, g: 0.11945031, b: 0.15523598, a: 1}
+  m_IndirectSpecularColor: {r: 0.0942856, g: 0.11944755, b: 0.15523255, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -288,6 +288,14 @@ PrefabInstance:
 
         FUN'
       objectReference: {fileID: 0}
+    - target: {fileID: 6284543818140855171, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284543818140855171, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1a41e05c5a8cb0e4094fdd219435683b, type: 3}
     - target: {fileID: 7287250535273432242, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
       propertyPath: m_Name
       value: OverBox
@@ -490,6 +498,14 @@ PrefabInstance:
 
         ROUND'
       objectReference: {fileID: 0}
+    - target: {fileID: 6284543818140855171, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284543818140855171, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: cca50667d2a60ba4081aedcaa62f8598, type: 3}
     - target: {fileID: 7287250535273432242, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
       propertyPath: m_Name
       value: OverBox (2)
@@ -1764,8 +1780,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2066603231}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.28929093}
-  m_AnchorMax: {x: 1, y: 0.71070886}
+  m_AnchorMin: {x: 0, y: 0.28929096}
+  m_AnchorMax: {x: 1, y: 0.7107089}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2125,6 +2141,14 @@ PrefabInstance:
 
         KING'
       objectReference: {fileID: 0}
+    - target: {fileID: 6284543818140855171, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284543818140855171, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 37bcb14a0c426924fb1a8d0afcb99981, type: 3}
     - target: {fileID: 7287250535273432242, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
       propertyPath: m_Name
       value: OverBox (3)
@@ -2674,6 +2698,14 @@ PrefabInstance:
 
         Entrance'
       objectReference: {fileID: 0}
+    - target: {fileID: 6284543818140855171, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284543818140855171, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f3db224bd2dcce648872153893e996ef, type: 3}
     - target: {fileID: 7287250535273432242, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
       propertyPath: m_Name
       value: OverBox
@@ -3317,6 +3349,14 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 6284543818140855171, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284543818140855171, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 325773ba2ebfeda47a89c9f573f86ce8, type: 3}
     - target: {fileID: 7287250535273432242, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
       propertyPath: m_Name
       value: OverBox (1)

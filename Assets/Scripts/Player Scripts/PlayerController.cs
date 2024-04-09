@@ -235,7 +235,7 @@ public class PlayerController : MonoBehaviour
             paused = !paused;
             Time.timeScale = 1;
             Cursor.visible = false;
-            audioMixer.SetFloat("CutoffParam", 0.5f);
+            audioMixer.SetFloat("CutoffParam", 2371.5f);
         }
         else if (!paused)
         {
@@ -245,7 +245,7 @@ public class PlayerController : MonoBehaviour
             paused = !paused;
             Time.timeScale = 0;
             Cursor.visible = true;
-            audioMixer.SetFloat("CutoffParam", 0.5f);
+            audioMixer.SetFloat("CutoffParam", 250.0f);
         }
     }
 
@@ -343,6 +343,11 @@ public class PlayerController : MonoBehaviour
             //allow directional change without affecting speed.
             AdjustAirDirection(moveDirection);
         }
+
+        float magn = (transform.position - prevPos).magnitude;
+        footstepMagnitude += magn;
+        prevPos = transform.position;
+
     }
 
     private void AdjustAirDirection(Vector3 inputDirection)
