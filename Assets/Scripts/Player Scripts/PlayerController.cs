@@ -2,9 +2,10 @@ using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
-    //https://www.youtube.com/watch?v=TYzZsBl3OI0&t=183s&ab_channel=Dave%2FGameDevelopment 
-    //start at around 5:00 to continue the implementation
+//https://www.youtube.com/watch?v=TYzZsBl3OI0&t=183s&ab_channel=Dave%2FGameDevelopment 
+//start at around 5:00 to continue the implementation
 
 public class PlayerController : MonoBehaviour
 {
@@ -103,13 +104,14 @@ public class PlayerController : MonoBehaviour
     public float footstepTimeout = 3.0f;
     private float footstepMagnitude = 0.0f;
     private Vector3 prevPos;
-
+    public AudioMixer audioMixer;
 
     private void Start()
     {
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
         _input = GetComponent<StarterAssetsInputs>();
+        
         
         rb.freezeRotation = true;
 
@@ -119,6 +121,7 @@ public class PlayerController : MonoBehaviour
         canDoubleJumpDelta = canDoubleJumpTimeout;
         prevPos = transform.position;
 
+        
         //startYScale = transform.localScale.y;
     }
 
@@ -225,6 +228,7 @@ public class PlayerController : MonoBehaviour
             paused = !paused;
             Time.timeScale = 1;
             Cursor.visible = false;
+            audioMixer.SetFloat("CutoffParam", 0.5f);
         }
         else if (!paused)
         {
@@ -234,6 +238,7 @@ public class PlayerController : MonoBehaviour
             paused = !paused;
             Time.timeScale = 0;
             Cursor.visible = true;
+            audioMixer.SetFloat("CutoffParam", 0.5f);
         }
     }
 
