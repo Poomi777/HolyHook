@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-    //https://www.youtube.com/watch?v=TYzZsBl3OI0&t=183s&ab_channel=Dave%2FGameDevelopment 
-    //start at around 5:00 to continue the implementation
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,8 +12,12 @@ public class PlayerController : MonoBehaviour
     public float sprintSpeed;
     public float swingSpeed;
     public float airSpeed;
+    public float maxAirSpeed = 27f;
+    public float maxGroundSpeed = 7f;
 
     public float groundDrag;
+
+    public Vector3 lastVelocity;
 
     [Header("Jumping")]
     public float jumpForce;
@@ -120,6 +122,8 @@ public class PlayerController : MonoBehaviour
         prevPos = transform.position;
 
         //startYScale = transform.localScale.y;
+
+        lastVelocity = Vector3.zero;
     }
 
     private void Update()
@@ -151,11 +155,14 @@ public class PlayerController : MonoBehaviour
 
         CheckFootstepSound();
 
+        lastVelocity = rb.velocity;
+
     }
 
     private void FixedUpdate()
     {
         MovePlayer();
+        SpeedControl();
     }
 
     private void MyInput()
@@ -317,77 +324,100 @@ public class PlayerController : MonoBehaviour
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        // // on slope
-        // if (OnSlope() && !exitingSlope)
-        // {
-        //     rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
 
-        //     if (rb.velocity.y > 0)
-        //         rb.AddForce(Vector3.down * 80f, ForceMode.Force);
-        // }
 
-        
-        // on ground
-        if (grounded)
+        if (swinging || grounded)
         {
-            rb.AddForce(moveDirection * moveSpeed * 10f, ForceMode.Force);
+            float dynamicSpeed = CalculateDynamicSpeed();
+            Vector3 forceToApply = moveDirection.normalized * dynamicSpeed * 10f * (grounded ? 1f : airMultiplier);
+            rb.AddForce(forceToApply, ForceMode.Force);
         }
+        //air movement (not swinging)
+        else if (!grounded && !swinging)
+        {
+            //allow directional change without affecting speed.
+            AdjustAirDirection(moveDirection);
+        }
+    }
 
-        // in air
+    private void AdjustAirDirection(Vector3 inputDirection)
+    {
+        
+        if (inputDirection.sqrMagnitude > 0.01f)
+        {
+            inputDirection = inputDirection.normalized;
+            
+            float currentSpeed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
+            
+            Vector3 newVelocity = inputDirection * currentSpeed;
+            
+            newVelocity.y = rb.velocity.y;
+            
+            rb.velocity = newVelocity;
+        }
+    }
+
+    private float CalculateDynamicSpeed()
+    {
+        //dynamic speed calculation. Replace as needed
+        float speed = moveSpeed;
+        if (swinging)
+        {
+             //use either the swingSpeed or the last known velocity, whichever is greater
+            speed = Mathf.Max(swingSpeed, lastVelocity.magnitude);
+        }
         else if (!grounded)
         {
-            rb.AddForce(moveDirection * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            //similar here
+            speed = Mathf.Max(airSpeed, lastVelocity.magnitude);
         }
-
-        Vector3 newPos = transform.position;
-
-
-        float magn = (newPos - prevPos).magnitude;
-        footstepMagnitude += magn;
-        prevPos = transform.position;
-        // turn gravity off while on slope
-        //rb.useGravity = !OnSlope();
+        return speed;
     }
 
     private void SpeedControl()
     {
-        //stops player from speed while grappling
-        //if (activeGrapple) return;
 
-        // // limiting speed on slope
-        // if (OnSlope() && !exitingSlope)
-        // {
-        //     if (rb.velocity.magnitude > moveSpeed)
-        //         rb.velocity = rb.velocity.normalized * moveSpeed;
-        // }
-
-        // limiting speed on ground or in air
-        // else
-        // {
-            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-            // limit velocity if needed
-            if (flatVel.magnitude > moveSpeed)
+         //preserve momentum when swinging or in air, applying max speed constraints otherwise
+        if (!swinging && state == MovementState.air)
+        {
+            //enforce maxAirSpeed only if gaining speed through air control mechanics
+            if (rb.velocity.magnitude > maxAirSpeed)
             {
-                Vector3 limitedVel = flatVel.normalized * moveSpeed;
-                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxAirSpeed);
             }
-        // }
+        }
+        else if (grounded && !activeGrapple)
+        {
+            //enforce maxGroundSpeed on the ground
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            if (flatVel.magnitude > maxGroundSpeed)
+            {
+                rb.velocity = new Vector3(flatVel.normalized.x * maxGroundSpeed, rb.velocity.y, flatVel.normalized.z * maxGroundSpeed);
+            }
+        }
     }
 
     private void Jump()
     {
-        //exitingSlope = true;
 
         // reset y velocity
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        // rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        if (readyToDoubleJump)
-            rb.AddForce(transform.up * doubleJumpForce, ForceMode.Impulse);
-        else if (readyToJumpAfterSwing)
-            rb.AddForce(transform.up * jumpAfterSwingForce, ForceMode.Impulse);
-        else
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        // if (readyToDoubleJump)
+        //     rb.AddForce(transform.up * doubleJumpForce, ForceMode.Impulse);
+        // else if (readyToJumpAfterSwing)
+        //     rb.AddForce(transform.up * jumpAfterSwingForce, ForceMode.Impulse);
+        // else
+        // rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+
+        //new jump implementation
+        Vector3 jumpDirection = Vector3.up * jumpForce;
+        if (readyToDoubleJump || readyToJumpAfterSwing)
+        {
+            jumpDirection = Vector3.up * Mathf.Max(jumpForce, lastVelocity.y + jumpForce); 
+        }
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z); 
+        rb.AddForce(jumpDirection, ForceMode.Impulse);
 
     }
     private void ResetJump()
@@ -396,22 +426,6 @@ public class PlayerController : MonoBehaviour
 
         //exitingSlope = false;
     }
-
-    // private bool OnSlope()
-    // {
-    //     if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
-    //     {
-    //         float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-    //         return angle < maxSlopeAngle && angle != 0;
-    //     }
-
-    //     return false;
-    // }
-
-    // private Vector3 GetSlopeMoveDirection()
-    // {
-    //     return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
-    // }
 
     public void JumpToPosition(Vector3 targetposition, float trajectoryHeight)
     {
@@ -430,7 +444,7 @@ public class PlayerController : MonoBehaviour
         enableMovementOnNextTouch = true;
         rb.velocity = velocityToSet;
 
-        cam.DoFov(grappleFov);
+        // cam.DoFov(grappleFov);
         
     }
 
@@ -456,7 +470,7 @@ public class PlayerController : MonoBehaviour
     public void ResetRestrictions()
     {
         activeGrapple = false;
-        cam.DoFov(85f);
+        // cam.DoFov(85f);
     }
 
     private void CheckFootstepSound()

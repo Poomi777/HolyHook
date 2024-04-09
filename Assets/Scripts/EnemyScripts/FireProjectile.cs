@@ -8,6 +8,7 @@ public class FireProjectile : MonoBehaviour
 
     public Transform bulletSpawnPoint;
     public GameObject projectileToFire;
+    public RangedEnemyPathfinding pathfinding;
     private GameObject player;
     public float fireRate;
     public float projectileSpeed;
@@ -26,7 +27,7 @@ public class FireProjectile : MonoBehaviour
         Ray ray = new Ray(transform.position, player.transform.position - transform.position);
         Physics.Raycast(ray, out Hit, Mathf.Infinity);
 
-        if (Hit.collider.gameObject.tag == "Player")
+        if (Hit.collider.gameObject.tag == "Player" && pathfinding.canShoot)
         {
             Fire();
         }

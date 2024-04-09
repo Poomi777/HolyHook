@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class WinScreenButtonsScript : MonoBehaviour
-{
-    public string loadScene;
-    
+{   
     public void ToMainMenu()
     {
         Time.timeScale = 1;
@@ -18,6 +16,6 @@ public class WinScreenButtonsScript : MonoBehaviour
     public void LoadNextLevel()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(loadScene);
+        SceneManager.LoadScene(GameManager.instance.nextLevel);
     }
 }
