@@ -282,6 +282,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 306368369}
     m_Modifications:
+    - target: {fileID: 5554745075794549928, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
+      propertyPath: LevelScoreName
+      value: PlaytestLevel
+      objectReference: {fileID: 0}
     - target: {fileID: 5797187149342502757, guid: 51156cdf71b3fc34bbb5c8c44d0d6572, type: 3}
       propertyPath: m_text
       value: 'HAVE
