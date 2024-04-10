@@ -18,7 +18,8 @@ public class RangedEnemyPathfinding : MonoBehaviour
     public float objectVelocityMultiplier;
     public float standupYOffset;
     public bool canShoot;
-
+    [SerializeField]
+    public Animator rangedAnimation;
 
     // No touching
 
@@ -54,7 +55,9 @@ public class RangedEnemyPathfinding : MonoBehaviour
             {
                 agent.destination = player.transform.position;
             }
+            rangedAnimation.SetBool("IsWalking", agent.velocity.magnitude > 0.01f);
         }
+        rangedAnimation.SetBool("IsWalking", false);
         if (standupCooldownTimer >= 0)
         {
             standupCooldownTimer -= Time.deltaTime;

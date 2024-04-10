@@ -13,6 +13,8 @@ public class FireProjectile : MonoBehaviour
     public float fireRate;
     public float projectileSpeed;
 
+    public Animator rangedAnimation;
+
     private float timer = 0f;
 
     private void Start()
@@ -33,13 +35,18 @@ public class FireProjectile : MonoBehaviour
         }
 
     }
+
+    void FireProjectileTimedAnimation()
+    {
+        Instantiate(projectileToFire, bulletSpawnPoint.transform.position, bulletSpawnPoint.transform.rotation);
+
+        timer = fireRate;
+    }
+
     void Fire()
     {
         if(timer > 0) { return; }
-
-        Instantiate(projectileToFire, bulletSpawnPoint.transform.position, bulletSpawnPoint.transform.rotation);
-        
-        timer = fireRate;
+        rangedAnimation.SetTrigger("FirePojectileAnimation");
     }
 
 
