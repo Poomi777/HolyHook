@@ -33,15 +33,15 @@ public class WinCanvasScript : MonoBehaviour
 
             for (int i = 0; i < DiamondsScored; i++)
             {
-                if (i == 1)
+                if (i == 0)
                 {
                     FullDiamond1.SetActive(true);
                 }
-                else if (i == 2)
+                else if (i == 1)
                 {
                     FullDiamond2.SetActive(true);
                 }
-                else if (i == 3)
+                else if (i == 2)
                 {
                     FullDiamond3.SetActive(true);
                 }

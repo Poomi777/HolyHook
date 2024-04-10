@@ -14,6 +14,7 @@ public class Swinging : MonoBehaviour
 
     [Header("Input")]
     public KeyCode swingKey = KeyCode.Mouse0;
+    public bool isAllowedToSwing;
 
     [Header("Swinging")]
     private float maxSwingDistance = 25f;
@@ -104,6 +105,7 @@ public class Swinging : MonoBehaviour
 
     void Start()
     {
+        isAllowedToSwing = true;
         _input = GetComponent<StarterAssetsInputs>();
     }
 
@@ -152,7 +154,7 @@ public class Swinging : MonoBehaviour
             }
         }
         */
-        if (_input.swing && !isSwinging)
+        if (_input.swing && !isSwinging && isAllowedToSwing)
         {
             StartSwing();
             isSwinging = true;

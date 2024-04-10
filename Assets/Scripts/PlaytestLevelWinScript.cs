@@ -25,6 +25,8 @@ public class PlaytestLevelWinScript : MonoBehaviour
             {
                 GameObject.Find("Player").GetComponent<PlayerController>().WinTrigger();
             }
+
+            PlayerPrefs.Save();
         }
     }
 }
