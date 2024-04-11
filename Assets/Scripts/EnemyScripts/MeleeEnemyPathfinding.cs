@@ -9,6 +9,7 @@ public class MeleeEnemyPathfinding : MonoBehaviour
 {
     
     [Header("Attack Settings")]
+    public bool turnOff;
     public float distanceTilAttack;
     public float attackCooldown;
     public float durationOfAttack;
@@ -54,11 +55,11 @@ public class MeleeEnemyPathfinding : MonoBehaviour
 
     void Update()
     {
-        if (!grappled && !hasBeenGrappled)
+        if (!grappled && !hasBeenGrappled && !turnOff)
         {
             agent.destination = player.transform.position;
         }
-        if (Vector3.Distance(transform.position, player.transform.position) <= distanceTilAttack)
+        if (Vector3.Distance(transform.position, player.transform.position) <= distanceTilAttack && !turnOff)
         {
             Attack();
         }

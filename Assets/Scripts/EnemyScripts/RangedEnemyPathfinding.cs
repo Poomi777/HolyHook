@@ -9,6 +9,7 @@ public class RangedEnemyPathfinding : MonoBehaviour
     private GameObject player;
 
     [Header("Attack Settings")]
+    public bool turnOff;
     public float maxHealth;
     public float currentHealth;
 
@@ -41,7 +42,7 @@ public class RangedEnemyPathfinding : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!grappled && !hasBeenGrappled)
+        if (!grappled && !hasBeenGrappled && !turnOff)
         {
             RaycastHit Hit;
             Ray ray = new Ray(transform.position, player.transform.position - transform.position);
