@@ -456,7 +456,7 @@ public class PlayerController : MonoBehaviour
     public void ResetRestrictions()
     {
         activeGrapple = false;
-        cam.DoFov(85f);
+        //cam.DoFov(85f);
     }
 
     private void CheckFootstepSound()
