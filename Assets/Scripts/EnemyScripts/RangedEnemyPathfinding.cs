@@ -17,7 +17,9 @@ public class RangedEnemyPathfinding : MonoBehaviour
     public float minObjectHurtSpeed;
     public float objectVelocityMultiplier;
     public float standupYOffset;
-
+    public bool canShoot;
+    [SerializeField]
+    public Animator rangedAnimation;
 
     // No touching
 
@@ -31,6 +33,7 @@ public class RangedEnemyPathfinding : MonoBehaviour
     {
         currentHealth = maxHealth;
         standupCooldownTimer = -1;
+        canShoot = true;
 
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player");
@@ -52,7 +55,9 @@ public class RangedEnemyPathfinding : MonoBehaviour
             {
                 agent.destination = player.transform.position;
             }
+            rangedAnimation.SetBool("IsWalking", agent.velocity.magnitude > 0.01f);
         }
+        rangedAnimation.SetBool("IsWalking", false);
         if (standupCooldownTimer >= 0)
         {
             standupCooldownTimer -= Time.deltaTime;
@@ -63,6 +68,7 @@ public class RangedEnemyPathfinding : MonoBehaviour
                 agent.enabled = true;
                 // May wanna reset rigidbody velocity...
                 transform.position = new Vector3(transform.position.x, standupYOffset + transform.position.y, transform.position.z);
+                canShoot = true;
                 
                 Vector3 direction = (player.transform.position - transform.position).normalized;
                 direction.y = 0;
@@ -84,6 +90,8 @@ public class RangedEnemyPathfinding : MonoBehaviour
 
     public void GetGrappled()
     {
+        canShoot = false;
+        hasBeenGrappled = false;
         grappled = true;
         agent.enabled = false;
         standupCooldownTimer = -1;
@@ -100,6 +108,7 @@ public class RangedEnemyPathfinding : MonoBehaviour
     {
         if (hasBeenGrappled || grappled)
         {
+
             if (other.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed || this.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed)
             {
                 currentHealth -= (other.GetComponent<Rigidbody>().velocity.magnitude + this.GetComponent<Rigidbody>().velocity.magnitude) * objectVelocityMultiplier;
@@ -112,7 +121,7 @@ public class RangedEnemyPathfinding : MonoBehaviour
         }
         else
         {
-            if (other.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed)
+            if (other.GetComponent<Rigidbody>().velocity.magnitude > minObjectHurtSpeed && other.gameObject.layer != LayerMask.NameToLayer("EnemyProjectile"))
             {
                 currentHealth -= other.GetComponent<Rigidbody>().velocity.magnitude * objectVelocityMultiplier;
             }
