@@ -14,6 +14,10 @@ public class CollisionSound : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 1.0f;
+            audioSource.rolloffMode = AudioRolloffMode.Logarithmic;
+            audioSource.minDistance = 1.0f;
+            audioSource.maxDistance = 3.0f;
+
         }
     }
     // Start is called before the first frame update
@@ -33,7 +37,12 @@ public class CollisionSound : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        float audioLevel = collision.relativeVelocity.magnitude / 10.0f;
-        audioSource.PlayOneShot(collisionSound, audioLevel);
+        if (collision.relativeVelocity.magnitude > 10.0f)
+        {
+            audioSource.pitch = Random.Range(0.6f,1.6f);
+            float audioLevel = collision.relativeVelocity.magnitude / 10.0f;
+            audioSource.PlayOneShot(collisionSound, audioLevel);
+
+        }
     }
 }

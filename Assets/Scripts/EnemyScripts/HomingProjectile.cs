@@ -43,7 +43,7 @@ public class HomingProjectile : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerHealtScript>().TakeDamage(damage);
+            other.GetComponent<PlayerHealtScript>().TakeDamage(damage, "Ranged");
         }
         if (other.gameObject.layer != LayerMask.NameToLayer("EnemyProjectile"))
         {

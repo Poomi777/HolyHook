@@ -102,6 +102,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Audio")]
     public AudioClip[] foostepSounds;
+    public AudioClip jumpSound;
+    public AudioClip doubleJumpSound;
     public AudioSource footstepSource;
     public float footstepTimeout = 3.0f;
     private float footstepMagnitude = 0.0f;
@@ -182,6 +184,7 @@ public class PlayerController : MonoBehaviour
             canDoubleJumpDelta = canDoubleJumpTimeout;
             Jump();
             readyToDoubleJump = true;
+            footstepSource.PlayOneShot(jumpSound);
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
@@ -191,6 +194,7 @@ public class PlayerController : MonoBehaviour
             canDoubleJumpDelta = canDoubleJumpTimeout;
             Jump();
             readyToDoubleJump = false;
+            footstepSource.PlayOneShot(doubleJumpSound);
 
             //Invoke(nameof(ResetJump), jumpCooldown);
         }
@@ -200,6 +204,7 @@ public class PlayerController : MonoBehaviour
             Jump();
             readyToJumpAfterSwing = false;
             hasJumpedInSwing = true;
+            footstepSource.PlayOneShot(doubleJumpSound);
         }
 
         if (_input.pause) // NEEDS TO BE CHANGED TO STANDARD KEY, DUNNO HOW TO DO - Ágúst

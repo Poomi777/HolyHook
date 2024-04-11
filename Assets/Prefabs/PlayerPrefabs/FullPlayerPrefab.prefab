@@ -4229,8 +4229,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c3a4d1ce2fe82e344b0d1e49217d35a3, type: 3}
   - {fileID: 8300000, guid: 199d10ae8db80d343882fe0abe149ee9, type: 3}
   - {fileID: 8300000, guid: f49e3e448e3aa5a4cb3c116ab19ed64b, type: 3}
-  footstepSource: {fileID: 0}
+  jumpSound: {fileID: 8300000, guid: 5d874c46ea8dc1a4a8b090030147fe26, type: 3}
+  doubleJumpSound: {fileID: 8300000, guid: 8c66610acc5bd9149988b1465217b189, type: 3}
+  footstepSource: {fileID: 881950888703620860}
   footstepTimeout: 3
+  audioMixer: {fileID: 0}
 --- !u!114 &8443737837676135401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4297,23 +4300,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   swingSounds:
-  - {fileID: 8300000, guid: cdb0aefe22b25db4e9c22c80e92107b8, type: 3}
-  - {fileID: 8300000, guid: 3ae9598fbc1187944b91089cf52021f1, type: 3}
-  - {fileID: 8300000, guid: 1b8b90c69e9976c45afe7d67b0e8cc5c, type: 3}
-  - {fileID: 8300000, guid: 65a388ed2ec123f4a941fdf0e8fac208, type: 3}
-  - {fileID: 8300000, guid: a7c989f8f81b0fe4fb17579f01024b8d, type: 3}
-  - {fileID: 8300000, guid: 72c053780977c6345ab98e0da5833d1c, type: 3}
-  - {fileID: 8300000, guid: dcb4622e999e15042b293806d249299d, type: 3}
-  - {fileID: 8300000, guid: 779983ca499bb6845a83f7518a322d5f, type: 3}
   - {fileID: 8300000, guid: 384fea46cd0ff47499e9ef26f560435e, type: 3}
-  - {fileID: 8300000, guid: df86c7186cfca68449215c9a546909ba, type: 3}
-  - {fileID: 8300000, guid: dd38c09cbbac0d44087191f97dd21d46, type: 3}
-  - {fileID: 8300000, guid: 6046ffa87b82e2046a7d144cc46fad62, type: 3}
-  - {fileID: 8300000, guid: 8c66610acc5bd9149988b1465217b189, type: 3}
-  - {fileID: 8300000, guid: 42945eb197127f547ad9399682faf46c, type: 3}
   - {fileID: 8300000, guid: a535d6dab7ac77645ae3353d7ceacd00, type: 3}
-  - {fileID: 8300000, guid: edd154a64b082984d865d4cadefdd3c1, type: 3}
-  - {fileID: 8300000, guid: bc6b8bf94fc23844ba706e39e756c1f9, type: 3}
+  - {fileID: 8300000, guid: 1b8b90c69e9976c45afe7d67b0e8cc5c, type: 3}
   grappleObjectKey: 324
   grappledObject: {fileID: 0}
   whatIsGrappleObject:
@@ -4496,6 +4485,8 @@ MonoBehaviour:
   DeathTime: 0
   healthBar: {fileID: 2235368218273220853}
   deathCanvas: {fileID: 5133483867291382950}
+  playerRangedHitSound: {fileID: 8300000, guid: f1e73850868aa0d4daf1232a2bb40269, type: 3}
+  playerMeleeHitSound: {fileID: 8300000, guid: 3df9bbbc130ccb344af5f3fc793a630f, type: 3}
 --- !u!114 &5110929150583970022
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,7 +11,8 @@ public class PlayerHealtScript : MonoBehaviour
     public GameObject deathCanvas;
 
     private AudioSource audioSource;
-    public AudioClip playerHitSound;
+    public AudioClip playerRangedHitSound;
+    public AudioClip playerMeleeHitSound;
 
     private void Awake()
     {
@@ -47,9 +48,16 @@ public class PlayerHealtScript : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, string damageType)
     {
-        audioSource.PlayOneShot(playerHitSound, 1.0f);
+        if (damageType == "Melee")
+        {
+            audioSource.PlayOneShot(playerMeleeHitSound, 1.0f);
+        }
+        if (damageType == "Ranged")
+        {
+            audioSource.PlayOneShot(playerRangedHitSound, 1.0f);
+        }
         if ((currentHealth - damage) <= 0)
         {
             healthBar.UpdateHealth(currentHealth);

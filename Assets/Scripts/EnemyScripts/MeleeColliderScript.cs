@@ -10,7 +10,7 @@ public class MeleeColliderScript : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            other.GetComponent<PlayerHealtScript>().TakeDamage(damage);
+            other.GetComponent<PlayerHealtScript>().TakeDamage(damage, "Melee");
         }
     }
 }
