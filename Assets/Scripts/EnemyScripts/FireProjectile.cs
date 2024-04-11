@@ -40,13 +40,14 @@ public class FireProjectile : MonoBehaviour
     {
         Instantiate(projectileToFire, bulletSpawnPoint.transform.position, bulletSpawnPoint.transform.rotation);
 
-        timer = fireRate;
     }
 
     void Fire()
     {
         if(timer > 0) { return; }
         rangedAnimation.SetTrigger("FirePojectileAnimation");
+        timer = fireRate;
+
     }
 
 

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -470,6 +470,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1115522621 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8736947133959444785, guid: 0cadcd25cc5f2a24caf639b87d94e5c3, type: 3}
+  m_PrefabInstance: {fileID: 2863431660369753156}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed93d15d62fd42f418865bc3ac345ac0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1398856641
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,11 +599,39 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!4 &1966683642 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 197054426353984166, guid: 0cadcd25cc5f2a24caf639b87d94e5c3, type: 3}
+  m_PrefabInstance: {fileID: 2863431660369753156}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &1990351814 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 6314715072834665449, guid: 0cadcd25cc5f2a24caf639b87d94e5c3, type: 3}
   m_PrefabInstance: {fileID: 2863431660369753156}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2012521973 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 723289118361058089, guid: 0cadcd25cc5f2a24caf639b87d94e5c3, type: 3}
+  m_PrefabInstance: {fileID: 2863431660369753156}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2012521975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012521973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b133dccefb1c21488d2e95c8b5f21e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletSpawnPoint: {fileID: 1966683642}
+  projectileToFire: {fileID: 4187384880519960863, guid: 607e1160cf9549745904fd1de0cd7095, type: 3}
+  pathfinding: {fileID: 1115522621}
+  fireRate: 5
+  projectileSpeed: 4
+  rangedAnimation: {fileID: 1990351814}
 --- !u!1001 &2126009265
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -738,10 +777,14 @@ PrefabInstance:
       propertyPath: rangedAnimation
       value: 
       objectReference: {fileID: 1990351814}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8428183703432057881, guid: 0cadcd25cc5f2a24caf639b87d94e5c3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 723289118361058089, guid: 0cadcd25cc5f2a24caf639b87d94e5c3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2012521975}
   m_SourcePrefab: {fileID: 100100000, guid: 0cadcd25cc5f2a24caf639b87d94e5c3, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
