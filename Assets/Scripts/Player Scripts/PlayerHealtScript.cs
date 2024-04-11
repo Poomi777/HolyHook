@@ -9,12 +9,32 @@ public class PlayerHealtScript : MonoBehaviour
     public float DeathTime;
     public HealthBarScript healthBar;
     public GameObject deathCanvas;
-    
-    
+
+    private AudioSource audioSource;
+    public AudioClip playerHitSound;
+
+    private void Awake()
+    {
+
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            //audioSource.spatialBlend = 1.0f;
+        }
+    }
     void Start()
     {
         currentHealth = maxHealth;
         healthBar.AssignHealth(maxHealth);
+    }
+
+    private void Update()
+    {
+        if (audioSource != null)
+        {
+            audioSource.outputAudioMixerGroup = AudioManager.instance.audioMixer;
+        }
     }
 
     void PlayerDeath()
@@ -29,6 +49,7 @@ public class PlayerHealtScript : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        audioSource.PlayOneShot(playerHitSound, 1.0f);
         if ((currentHealth - damage) <= 0)
         {
             healthBar.UpdateHealth(currentHealth);

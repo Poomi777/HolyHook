@@ -107,10 +107,16 @@ public class Swinging : MonoBehaviour
     {
         isAllowedToSwing = true;
         _input = GetComponent<StarterAssetsInputs>();
+
+        
     }
 
     void Update()
     {
+        if (audioSource != null)
+        {
+            audioSource.outputAudioMixerGroup = AudioManager.instance.audioMixer;
+        }
         MyInput();
 
         CheckForSwingPoints();
@@ -154,7 +160,7 @@ public class Swinging : MonoBehaviour
             }
         }
         */
-        if (_input.swing && !isSwinging && isAllowedToSwing)
+        if (_input.swing && !isSwinging && isAllowedToSwing && !playerMovement.paused)
         {
             StartSwing();
             isSwinging = true;

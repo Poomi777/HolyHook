@@ -2,6 +2,7 @@ using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 
 public class PlayerController : MonoBehaviour
@@ -105,13 +106,14 @@ public class PlayerController : MonoBehaviour
     public float footstepTimeout = 3.0f;
     private float footstepMagnitude = 0.0f;
     private Vector3 prevPos;
-
+    public AudioMixer audioMixer;
 
     private void Start()
     {
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
         _input = GetComponent<StarterAssetsInputs>();
+        
         
         rb.freezeRotation = true;
 
@@ -121,6 +123,7 @@ public class PlayerController : MonoBehaviour
         canDoubleJumpDelta = canDoubleJumpTimeout;
         prevPos = transform.position;
 
+        
         //startYScale = transform.localScale.y;
 
         lastVelocity = Vector3.zero;
@@ -232,6 +235,7 @@ public class PlayerController : MonoBehaviour
             paused = !paused;
             Time.timeScale = 1;
             Cursor.visible = false;
+            audioMixer.SetFloat("CutoffParam", 22000.5f);
         }
         else if (!paused)
         {
@@ -241,6 +245,7 @@ public class PlayerController : MonoBehaviour
             paused = !paused;
             Time.timeScale = 0;
             Cursor.visible = true;
+            audioMixer.SetFloat("CutoffParam", 250.0f);
         }
     }
 
@@ -338,6 +343,11 @@ public class PlayerController : MonoBehaviour
             //allow directional change without affecting speed.
             AdjustAirDirection(moveDirection);
         }
+
+        float magn = (transform.position - prevPos).magnitude;
+        footstepMagnitude += magn;
+        prevPos = transform.position;
+
     }
 
     private void AdjustAirDirection(Vector3 inputDirection)
