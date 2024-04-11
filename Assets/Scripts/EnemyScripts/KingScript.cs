@@ -17,6 +17,7 @@ public class KingScript : MonoBehaviour
     public GlassWinObject WindowWin3;
 
     public Light Torch;
+    public GameObject deathCanvas;
     public Light Torch1;
 
 
@@ -27,6 +28,7 @@ public class KingScript : MonoBehaviour
             WindowWin1.enabled = true;
             WindowWin2.enabled = true;
             WindowWin3.enabled = true;
+            deathCanvas.SetActive(true);
 
             Torch.color = new Color(0.00784313725490196f, 0.7843137254901961f, 0);
             Torch.intensity = 30;

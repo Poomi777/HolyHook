@@ -14,6 +14,10 @@ public class DeathCollider : MonoBehaviour
         else if (other.gameObject.layer == LayerMask.NameToLayer ("Object") || other.gameObject.layer == LayerMask.NameToLayer ( "Enemy" ))
         {
             Destroy(other.gameObject);
+            if (other.gameObject.layer == LayerMask.NameToLayer ( "Enemy" ))
+            {
+                GameManager.instance.enemyKills++;
+            }
         }
     }
 }

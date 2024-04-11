@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
     {
         if (!dontSaveScore)
         {
-
+            string unlock = nextLevel + "Unlock";
             float tempKillScore; // from 0 to 100
             float tempTimeScore; // from 0 to 100
             
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
                 DiamondsAchieved = 0;
             } 
 
-            PlayerPrefs.SetInt(nextLevel, 1);
+            PlayerPrefs.SetInt(unlock, 1);
             PlayerPrefs.Save();
         }
         return 1;
