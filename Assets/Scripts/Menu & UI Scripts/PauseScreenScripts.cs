@@ -13,6 +13,12 @@ public class PauseScreenScripts : MonoBehaviour
         player = GameObject.Find("Player");
     }
 
+    public void ReloadScene()
+    {
+        player.GetComponent<PlayerController>().PauseGame();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     public void LoadNewScene()
     {
         player.GetComponent<PlayerController>().PauseGame();
