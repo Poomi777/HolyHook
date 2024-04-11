@@ -9,11 +9,12 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: GrapplingRope
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_Parent: {fileID: 2100000, guid: 4bc3336f91d8c814abd7016cbc1a6c7b, type: 2}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_Parent: {fileID: -8012989087107641214, guid: a95ed173d1d5f544598618c949e4f339, type: 3}
+  m_ModifiedSerializedProperties: 10
+  m_ValidKeywords:
+  - _EMISSION
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -25,10 +26,12 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _Cull: 2
     m_Colors:
     - _BaseColor: {r: 0, g: 0, b: 0, a: 1}
     - _Color: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 588.13367, g: 580.29425, b: 0.26344463, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &2912261640042764986
 MonoBehaviour:

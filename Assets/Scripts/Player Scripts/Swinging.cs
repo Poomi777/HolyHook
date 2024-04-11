@@ -23,6 +23,10 @@ public class Swinging : MonoBehaviour
 
     private Vector3 currentGrapplePosition;
 
+    public Transform grapplingGun;
+    private Quaternion gunSwingRotation = Quaternion.Euler(172f, 0, 0); // Set the desired rotation during swing
+    private Quaternion gunDefaultRotation = Quaternion.Euler(90f, 0, 0); // Set the default rotation
+
     //changes
     [Header("Grappling")]
     public float maxGrappleDistance;
@@ -229,6 +233,10 @@ public class Swinging : MonoBehaviour
         posAtStartSwing = gameObject.transform.position;
 
         PlayRandomSound();
+        if (grapplingGun != null)
+        {
+            grapplingGun.localRotation = gunSwingRotation;
+        }
     }
 
     public void StopSwing()
@@ -262,6 +270,11 @@ public class Swinging : MonoBehaviour
             {
                 Destroy(existingJoint);
             }
+        }
+
+        if (grapplingGun != null)
+        {
+            grapplingGun.localRotation = gunDefaultRotation;
         }
         
     }
