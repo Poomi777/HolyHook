@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1109223189121041697}
-  - component: {fileID: 8428183703432057881}
   m_Layer: 0
   m_Name: ProjectileEnemy2.0
   m_TagString: Untagged
@@ -33,23 +32,6 @@ Transform:
   - {fileID: 1330841972336059138}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8428183703432057881
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2929875346755381522}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b133dccefb1c21488d2e95c8b5f21e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletSpawnPoint: {fileID: 197054426353984166}
-  projectileToFire: {fileID: 4187384880519960863, guid: 607e1160cf9549745904fd1de0cd7095, type: 3}
-  pathfinding: {fileID: 8736947133959444785}
-  fireRate: 5
-  projectileSpeed: 4
 --- !u!1 &2991670764751163945
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,6 +120,7 @@ MonoBehaviour:
   objectVelocityMultiplier: 5
   standupYOffset: 1
   canShoot: 0
+  rangedAnimation: {fileID: 6314715072834665449}
 --- !u!195 &1685021331668683108
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -147,7 +130,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 7013154313861699561}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1
+  m_Radius: 1.5
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -301,13 +284,52 @@ PrefabInstance:
       propertyPath: m_Name
       value: SkeletonLich_II
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 08efc9727b654e347a68239e7bf49790, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 13bfd9e9b0e4862499940a338f480c8b, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 08efc9727b654e347a68239e7bf49790, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 08efc9727b654e347a68239e7bf49790, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2220917590760156018}
   m_SourcePrefab: {fileID: 100100000, guid: 08efc9727b654e347a68239e7bf49790, type: 3}
 --- !u!4 &90761602753667475 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 08efc9727b654e347a68239e7bf49790, type: 3}
+  m_PrefabInstance: {fileID: 488863000721999480}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &723289118361058089 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 08efc9727b654e347a68239e7bf49790, type: 3}
+  m_PrefabInstance: {fileID: 488863000721999480}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2220917590760156018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723289118361058089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b133dccefb1c21488d2e95c8b5f21e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletSpawnPoint: {fileID: 197054426353984166}
+  projectileToFire: {fileID: 4187384880519960863, guid: 607e1160cf9549745904fd1de0cd7095, type: 3}
+  pathfinding: {fileID: 8736947133959444785}
+  fireRate: 5
+  projectileSpeed: 4
+  rangedAnimation: {fileID: 6314715072834665449}
+--- !u!95 &6314715072834665449 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 08efc9727b654e347a68239e7bf49790, type: 3}
   m_PrefabInstance: {fileID: 488863000721999480}
   m_PrefabAsset: {fileID: 0}
