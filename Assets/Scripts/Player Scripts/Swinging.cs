@@ -83,7 +83,7 @@ public class Swinging : MonoBehaviour
 
     public bool isObjectGrappleActive = false;
 
-    public float swingAngleToJump = 90.0f;
+    public float swingAngleToJump = 60.0f;
     
     Vector3 posAtStartSwing;
 
