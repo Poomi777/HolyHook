@@ -23,6 +23,10 @@ public class Swinging : MonoBehaviour
 
     private Vector3 currentGrapplePosition;
 
+    public Transform grapplingGun;
+    private Quaternion gunSwingRotation = Quaternion.Euler(172f, 0, 0); // Set the desired rotation during swing
+    private Quaternion gunDefaultRotation = Quaternion.Euler(90f, 0, 0); // Set the default rotation
+
     //changes
     [Header("Grappling")]
     public float maxGrappleDistance;
@@ -83,7 +87,7 @@ public class Swinging : MonoBehaviour
 
     public bool isObjectGrappleActive = false;
 
-    public float swingAngleToJump = 90.0f;
+    public float swingAngleToJump = 60.0f;
     
     Vector3 posAtStartSwing;
 
@@ -107,10 +111,16 @@ public class Swinging : MonoBehaviour
     {
         isAllowedToSwing = true;
         _input = GetComponent<StarterAssetsInputs>();
+
+        
     }
 
     void Update()
     {
+        if (audioSource != null)
+        {
+            audioSource.outputAudioMixerGroup = AudioManager.instance.audioMixer;
+        }
         MyInput();
 
         CheckForSwingPoints();
@@ -154,7 +164,7 @@ public class Swinging : MonoBehaviour
             }
         }
         */
-        if (_input.swing && !isSwinging && isAllowedToSwing)
+        if (_input.swing && !isSwinging && isAllowedToSwing && !playerMovement.paused)
         {
             StartSwing();
             isSwinging = true;
@@ -229,6 +239,10 @@ public class Swinging : MonoBehaviour
         posAtStartSwing = gameObject.transform.position;
 
         PlayRandomSound();
+        if (grapplingGun != null)
+        {
+            grapplingGun.localRotation = gunSwingRotation;
+        }
     }
 
     public void StopSwing()
@@ -262,6 +276,11 @@ public class Swinging : MonoBehaviour
             {
                 Destroy(existingJoint);
             }
+        }
+
+        if (grapplingGun != null)
+        {
+            grapplingGun.localRotation = gunDefaultRotation;
         }
         
     }

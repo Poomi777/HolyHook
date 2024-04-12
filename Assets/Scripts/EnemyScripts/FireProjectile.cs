@@ -29,7 +29,7 @@ public class FireProjectile : MonoBehaviour
         Ray ray = new Ray(transform.position, player.transform.position - transform.position);
         Physics.Raycast(ray, out Hit, Mathf.Infinity);
 
-        if (Hit.collider.gameObject.tag == "Player" && pathfinding.canShoot)
+        if (Hit.collider.gameObject.tag == "Player" && pathfinding.canShoot && !pathfinding.turnOff)
         {
             Fire();
         }
