@@ -1287,7 +1287,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 979aef027a1c86c42a15ce35fce366fa, type: 2}
+  - {fileID: -5122204350626923537, guid: e57b3f192c8029f41b3e8b2276402f1f, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5673,8 +5673,8 @@ GameObject:
   - component: {fileID: 3664479334004147216}
   - component: {fileID: 5859345443274519532}
   - component: {fileID: 1609161245192590910}
-  - component: {fileID: 1013897450122832542}
-  - component: {fileID: 3108146875358345439}
+  - component: {fileID: 6800717415912871313}
+  - component: {fileID: 1209626693435705915}
   m_Layer: 11
   m_Name: PlayerCamera
   m_TagString: Untagged
@@ -5801,7 +5801,7 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!114 &1013897450122832542
+--- !u!114 &6800717415912871313
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5861,7 +5861,7 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
---- !u!114 &3108146875358345439
+--- !u!114 &1209626693435705915
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5873,7 +5873,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: 64a21a986225fb04380c80fdf9b269e4, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 41f996b5ee7cc3e428a51b18964b93a4, type: 2}
   isGlobal: 1
   blendDistance: 0
   weight: 1
