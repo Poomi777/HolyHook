@@ -59,6 +59,8 @@ public class MeleeEnemyPathfinding : MonoBehaviour
         {
             agent.destination = player.transform.position;
         }
+        bool isMoving = !grappled && !hasBeenGrappled && !turnOff && agent.velocity.magnitude > 0.01f;
+        GetComponent<Animator>().SetBool("isWalking", isMoving);
         if (Vector3.Distance(transform.position, player.transform.position) <= distanceTilAttack && !turnOff)
         {
             Attack();
@@ -78,6 +80,8 @@ public class MeleeEnemyPathfinding : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(direction);
             }
         }
+        
+
         if (currentHealth <= 0)
         {
             Die();
@@ -94,28 +98,54 @@ public class MeleeEnemyPathfinding : MonoBehaviour
 
     void Attack() // IK this should prob not be in the pathfinding script but good code structure laterrrrr - Ágúst
     {
-        if (durationOfAttackTimer >= 0)
+        // if (durationOfAttackTimer >= 0)
+        // {
+        //     durationOfAttackTimer -= Time.deltaTime;
+        //     if (durationOfAttackTimer < 0)
+        //     {
+        //         gameObject.transform.GetChild(0).gameObject.SetActive(false); // Turning off collider;
+        //         attackTimer = attackCooldown;
+        //     }
+        // }
+        // else
+        // {
+        //     if (attackTimer >= 0)
+        //     {
+        //         attackTimer -= Time.deltaTime;
+        //     }
+        //     else
+        //     {
+        //         gameObject.transform.GetChild(0).gameObject.SetActive(true); // Turning on collider;
+        //         gameObject.GetComponent<Animator>().SetTrigger("Attack");
+        //         durationOfAttackTimer = durationOfAttack;
+        //     }
+        // }
+
+         if (attackTimer <= 0)
         {
-            durationOfAttackTimer -= Time.deltaTime;
-            if (durationOfAttackTimer < 0)
-            {
-                gameObject.transform.GetChild(0).gameObject.SetActive(false); // Turning off collider;
-                attackTimer = attackCooldown;
-            }
+            // Set the attack trigger to play the attack animation
+            gameObject.GetComponent<Animator>().SetTrigger("Attack");
+            attackTimer = attackCooldown; // Reset the attack timer
         }
         else
         {
-            if (attackTimer >= 0)
-            {
-                attackTimer -= Time.deltaTime;
-            }
-            else
-            {
-                gameObject.transform.GetChild(0).gameObject.SetActive(true); // Turning on collider;
-                gameObject.GetComponent<Animator>().SetTrigger("Attack");
-                durationOfAttackTimer = durationOfAttack;
-            }
+            // Decrease the attack timer
+            attackTimer -= Time.deltaTime;
         }
+    }
+
+    public void PerformAttack()
+    {
+        // This will be called by the animation event at the peak of the punch animation
+        gameObject.transform.GetChild(0).gameObject.SetActive(true); // Enable the attack collider
+        // Any other code you need to run when the actual punch happens.
+
+        StartCoroutine(DisableAttackCollider());
+    }
+    private IEnumerator DisableAttackCollider()
+    {
+        yield return new WaitForSeconds(0.1f); // Adjust the time as necessary for the animation
+        gameObject.transform.GetChild(0).gameObject.SetActive(false); // Disable the attack collider
     }
 
     public void GetGrappled()
