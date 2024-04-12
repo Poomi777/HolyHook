@@ -9,6 +9,7 @@ public class AudioManager : MonoBehaviour
 
     public static AudioManager instance;
     public AudioMixerGroup audioMixer;
+    public AudioClip[] enemySounds; 
     void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -24,4 +25,27 @@ public class AudioManager : MonoBehaviour
     {
         
     }
+
+    public IEnumerator CreateSoundAtLocation(Vector3 worldPosition)
+    {
+
+        Debug.Log("CreateSoundAtLocation");
+        GameObject obj = new GameObject();
+        obj.transform.position = worldPosition;
+        AudioSource objAudio = obj.AddComponent<AudioSource>();
+        objAudio.playOnAwake = false;
+        objAudio.spatialBlend = 1.0f;
+        objAudio.rolloffMode = AudioRolloffMode.Logarithmic;
+        objAudio.minDistance = 1.0f;
+        objAudio.maxDistance = 3.0f;
+        objAudio.PlayOneShot(enemySounds[Random.Range(0, enemySounds.Length)]);
+        
+        yield return null;
+
+        
+
+    }
+
+    
+
 }
