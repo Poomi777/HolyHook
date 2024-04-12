@@ -88,6 +88,8 @@ public class MeleeEnemyPathfinding : MonoBehaviour
     {
         // can animate here or add sfx;
         GameManager.instance.enemyKills++;
+        StartCoroutine(AudioManager.instance.CreateSoundAtLocation(gameObject.transform.position));
+        
         Destroy(this.gameObject);
 
     }

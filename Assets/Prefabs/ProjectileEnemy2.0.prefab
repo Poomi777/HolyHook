@@ -113,6 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed93d15d62fd42f418865bc3ac345ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  turnOff: 0
   maxHealth: 30
   currentHealth: 0
   standupCooldown: 3

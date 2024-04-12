@@ -4317,7 +4317,7 @@ MonoBehaviour:
   doubleJumpSound: {fileID: 8300000, guid: 8c66610acc5bd9149988b1465217b189, type: 3}
   footstepSource: {fileID: 881950888703620860}
   footstepTimeout: 3
-  audioMixer: {fileID: 0}
+  audioMixer: {fileID: 24100000, guid: f6360953341b52b4f803f78ce7f746ea, type: 2}
 --- !u!114 &8443737837676135401
 MonoBehaviour:
   m_ObjectHideFlags: 0
