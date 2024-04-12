@@ -19496,7 +19496,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homingSpeed: 10
-  bulletLifeTime: 10
+  bulletLifeTime: 7
   damage: 10
 --- !u!54 &2751040989482651223
 Rigidbody:
