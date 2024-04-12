@@ -35,6 +35,8 @@ public class KingScript : MonoBehaviour
             Torch1.color = new Color(0.00784313725490196f, 0.7843137254901961f, 0);
             Torch1.intensity = 30;
 
+            GameManager.instance.enemyKills++;
+
             Destroy(this.gameObject);
         }
     }
