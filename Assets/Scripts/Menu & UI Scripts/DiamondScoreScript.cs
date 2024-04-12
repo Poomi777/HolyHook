@@ -48,7 +48,7 @@ public class DiamondScoreScript : MonoBehaviour
         Lock.SetActive(true);
 
         int unlocked = PlayerPrefs.GetInt(LevelScoreName + "Unlock", 0);
-        if (unlocked == 1)
+        if (unlocked == 1 || LevelScoreName == "Level1"  || LevelScoreName == "Tutorial"  || LevelScoreName == "PlaytestLevel")
         {
             Lock.SetActive(false);
         }
